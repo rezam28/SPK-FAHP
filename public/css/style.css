@@ -124,11 +124,11 @@ body
     position: absolute;
     left: 0;
     /* left: 70px; */
-    top: 0;
-    right: 0;
+    /* top: 0;
+    right: 0; */
     width: 60px;
     height: 60px;
-    background: white;
+    background: #40E0D0;
     cursor: pointer;
     transition: 0.5s;
     z-index: 1;
@@ -137,7 +137,7 @@ body
 .toggle.active
 {
     position: absolute;
-    background: white;
+    background: #40E0D0;
     transition: 0.5s;
     /* left: 0; */
     /* left: 210px; */

@@ -24,8 +24,16 @@ Route::get('/peta','PetaController@index')->name('peta');
 Route::get('/hasil','HasilController@index')->name('hasil');
 Route::post('/hasil','HasilController@hasil')->name('hasil');
 
-Route::get('/login','LoginController@index')->name('login');
-Route::post('/postlogin','LoginController@postlogin')->name('login');
 
-Route::get('/admin','Admin\HomeController@index')->name('admin');
 Route::get('/logout','LoginController@Logout')->name('logout');
+
+Route::group(['middleware' => 'logged'], function()
+{
+    Route::get('/login','LoginController@index')->name('login');
+    Route::post('/postlogin','LoginController@postlogin')->name('login');
+});
+
+Route::group(['middleware' => 'admin'], function()
+{
+    Route::get('/admin','Admin\HomeController@index')->name('admin');
+});

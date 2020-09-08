@@ -6,6 +6,7 @@ use Hash;
 use Session;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -38,6 +39,7 @@ class LoginController extends Controller
     }
 
     public function logout(){
+        //Auth::Logout();
         Session::flush();
         return redirect('login')->with('alert','Kamu sudah logout');
     }

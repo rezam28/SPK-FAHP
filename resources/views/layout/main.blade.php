@@ -22,9 +22,12 @@
             @if (Route::has('login'))
                 <a href="{{route('logout')}}" class="logout">Logout</a>
             @endif
-            @auth('admin')
+            {{-- @auth('admin')
                  <a href="{{route('logout')}}" class="logout">Logout</a>
-            @endauth
+            @endauth --}}
+            {{-- @guest
+                <a href="{{route('logout')}}" class="logout">Metu</a>    
+            @endguest --}}
             <div class="toggle" onclick="ToggleMenu()"></div>
         </nav>
         <!--Sidebar-->
