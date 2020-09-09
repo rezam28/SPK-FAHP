@@ -23,7 +23,8 @@ Route::get('/', function () {
 Route::get('/peta','PetaController@index')->name('peta');
 Route::get('/hasil','HasilController@index')->name('hasil');
 Route::post('/hasil','HasilController@hasil')->name('hasil');
-
+Route::get('/alternatif','AlternatifController@index')->name('alternatif');
+Route::get('/kriteria','KriteriaController@index')->name('kriteria');
 
 Route::get('/logout','LoginController@Logout')->name('logout');
 
@@ -35,5 +36,8 @@ Route::group(['middleware' => 'logged'], function()
 
 Route::group(['middleware' => 'admin'], function()
 {
-    Route::get('/admin','Admin\HomeController@index')->name('admin');
+    Route::get('/admin','Admin\HomeController@index')->name('ad_home');
+    Route::get('/admin/alternatif','AlternatifController@admin')->name('ad_alternatif');
+    Route::post('/admin/alternatif/action','AlternatifController@action')->name('alternatif_action');
+    Route::get('/admin/kriteria','KriteriaController@admin')->name('ad_kriteria');
 });

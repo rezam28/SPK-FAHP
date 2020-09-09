@@ -1,6 +1,6 @@
 @extends('admin.layouts.main')
 
-@section('title',"Admin")
+@section('title',"Admin - Kriteria")
 
 @section('css')
 
@@ -8,7 +8,7 @@
 
 @section('content')
 <div>
-    <h1>Halaman Admin</h1>
+    <h1>Halaman Kriteria</h1>
 </div>
 @endsection
 

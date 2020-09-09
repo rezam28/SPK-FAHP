@@ -43,4 +43,8 @@ class LoginController extends Controller
         Session::flush();
         return redirect('login')->with('alert','Kamu sudah logout');
     }
+
+    protected function guard(){
+        return Auth::guard('admin');
+    }
 }
