@@ -13,7 +13,6 @@
 <body>
     <div class="main-content container">
         <!--navbar-->
-        <!-- Image and text -->
         <nav class="navbar">
             <a class="logo navbar-brand" href="{{route('ad_home')}}">
                 <img src="{{('../img/untag.png')}}" width="30" height="30" class="title" alt="" loading="lazy">
@@ -55,6 +54,9 @@
         <div class="content">
             @yield('content')
         </div>
+    </div>
+    <div class="popup">
+        @yield('popup')
     </div>
     
     

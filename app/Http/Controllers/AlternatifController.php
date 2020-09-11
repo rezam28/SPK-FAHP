@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use DB;
+use DataTables;
 use App\Models\Alternatif;
 use Illuminate\Http\Request;
 
@@ -14,9 +15,13 @@ class AlternatifController extends Controller
         return view('alternatif');
     }
 
-    public function admin()
+    public function admin(Request $request)
     {
-        $alternatif = DB::table('alternatif')->get();
+        $alternatif = Alternatif::all();
+        if ($request->ajax()) {
+            return DataTables::of($alternatif)->make(true);
+        }
+        //return response()->json($alternatif);
         return view('admin.alternatif', compact('alternatif'));
     }
 
@@ -32,6 +37,13 @@ class AlternatifController extends Controller
     				->where('id', $request->id)
     				->update($data);
             }
+
+            if($request->action == 'delete')
+    		{
+    			DB::table('alternatif')
+    				->where('id', $request->id)
+    				->delete();
+    		}
             return response()->json($request);
         }
     }

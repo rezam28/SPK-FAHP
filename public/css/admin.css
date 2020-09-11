@@ -185,7 +185,6 @@ body
     z-index: 2;
 }
 
-
 .panel
 {
     padding: 20px 10px 10px 20px;
@@ -198,6 +197,16 @@ body
     margin-left: 20px;
 }
 
+.panel-header button#btn-tambah{
+    position: relative;
+    left: 0;
+    right: 0;
+    color: aqua;
+}
+
+#modal-tambah{
+    transition: 0.5s;
+}
 @media only screen and (max-width: 740px){
     body{
         width: 740px;
