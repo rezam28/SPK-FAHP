@@ -1,6 +1,6 @@
 @extends('admin.layouts.main')
 
-@section('title',"Admin - Perbandingan Kriteria")
+@section('title',"Admin - Perbandingan Alternatif")
 
 @section('css')
     
@@ -8,30 +8,35 @@
 
 @section('content')
     <div id="perbandingan">
-        <h3>Perbandingan Kriteria</h3>
+        <h3>Perbandingan alternatif</h3>
         <hr>
         <div id="table-perbandingan" class="table-responsive-md col-12">
             <div class="panel-header">
-                <h3 class="title-center">Data Perbandingan Kriteria</h3>
+                <h3 class="title-center">Data Perbandingan alternatif</h3>
             </div>
             <div class="input-group">
                 <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option selected>Pilih Kriteria</option>
+                    <option value="1">cuaca</option>
+                    <option value="2">tekstur</option>
+                    <option value="3">kelembaban</option>
                 </select>
                 <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
                     <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="1">Padi</option>
+                    <option value="2">Jagung</option>
+                    <option value="3">Kacang Hijau</option>
                 </select>
                 <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option selected>Pilih Perbandingan</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option value="1">Padi</option>
+                        <option value="2">Jagung</option>
+                        <option value="3">Kacang Hijau</option>
                 </select>
                 <div class="input-group-append">
                     <button class="btn btn-success" type="button">Button</button>
