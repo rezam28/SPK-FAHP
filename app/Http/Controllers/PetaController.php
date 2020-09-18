@@ -10,4 +10,9 @@ class PetaController extends Controller
     {
         return view('peta');
     }
+
+    public function admin()
+    {
+        return view('admin.peta');
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlternatifTable extends Migration
+class CreatePerbandinganAlternatifTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateAlternatifTable extends Migration
      */
     public function up()
     {
-        Schema::create('alternatif', function (Blueprint $table) {
+        Schema::create('perbandingan_alternatif', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_alternatif');
-            $table->text('deskripsi');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ class CreateAlternatifTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alternatif');
+        Schema::dropIfExists('perbandingan_alternatif');
     }
 }

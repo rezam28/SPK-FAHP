@@ -13,7 +13,7 @@ class AlternatifSeeder extends Seeder
     {
         DB::table('alternatif')->insert([
     		'nama_alternatif' => 'padi sawah',
-    		'deskripsi' => 'ini adalah padi',
+    		'deskripsi' => 'Some seeding operations may cause you to alter or lose data. In order to protect you from running seeding commands against your production database, you will be prompted for confirmation before the seeders are executed. To force the seeders to run without a prompt, use the --force flag:',
     		'created_at' => date('Y-m-d H:i:s'),
     		'updated_at' => date('Y-m-d H:i:s'),
         ]);

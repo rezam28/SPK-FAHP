@@ -1,51 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-</head>
-<body>
-    <div class="panel-header">
-        <h3>Pilih Alternatif</h3>
-        <button type="button" class="btn btn-info btn-lg fa fa-plus" data-toggle="modal" data-target="#tambah">&nbsp Tambah</button>
+@extends('admin.layouts.main')
+
+@section('title',"Admin - Kriteria")
+
+@section('css')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+@endsection
+
+@section('content')
+    {{-- @if(\Session::has('alert'))
+    <div class="alert alert-danger" role="alert" style="width:1170px">
+      <div>{{Session::get('alert')}}</div>
     </div>
-    
+    @endif --}}
+  <div class="table-hasil">
+      <h3>Kriteria</h3>
+      <hr>
+      <div class="panel">
+            <div class="panel-header">
+              <h3 class="title-center">Data Kriteria</h3>
+              <button type="button" id="btn-tambah" class="btn btn-info btn-lg fa fa-plus" data-toggle="modal" data-target="#modal-tambah">&nbsp Tambah</button>
+            </div>
+              <div class="row">
+                <div class="col-12">
+                <table id="table" class="table table-bordered table-striped">
+                    @csrf
+                    <thead>
+                        <tr>
+                            <th scope="col">Nama Alternatif</th>
+                            <th scope="col">Deskripsi</th>
+                            <th scope="col">Aksi</th>
+                        </tr>
+                    </thead>
+                    </table>
+                </div>
+            </div>
+      </div>
+  </div>
+@endsection
+
+@section('popup')
     {{-- Modal Tambah --}}
-    <div id="tambah" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            {{-- modal content --}}
-            <div class="modal-content">
-                <div class="modal-header">
+      <div id="modal-tambah" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+              {{-- modal content --}}
+              <div class="modal-content">
+                  <div class="modal-header">
                     <h4 class="modal-title">Tambah Data</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        @csrf
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Fullname</label>
-                            <input type="text" class="form-control" id="Fullname" placeholder="Fullname">
-                        </div>
-                        <div class="form-group">
+                  </div>
+                  <div class="modal-body">
+                      <form>
+                          @csrf
+                          <div class="form-group">
+                              <label for="exampleInputEmail1">Fullname</label>
+                              <input type="text" class="form-control" id="Fullname" placeholder="Fullname">
+                          </div>
+                          <div class="form-group">
                             <label for="exampleInputEmail1">Username</label>
                             <input type="text" class="form-control" id="username" placeholder="Username">
-                        </div>
+                          </div>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-dismiss="modal">Tambah</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    {{-- end modal --}}
-</body>
-</html>
+              </div>
+          </div>
+      </div>
+      {{-- end modal --}}
+@endsection
+@section('javascript')
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#table').DataTable({
+                processing : true,
+                serverSide : true,
+                scrollY: "300px",
+                scrollX: true,
+                scrollCollapse: true,
+                ajax : {
+                    url: "{{route('ad_kriteria')}}",
+                },
+                columns: [
+                    {data: 'nama_kriteria' , nama:'nama_kriteria'},
+                    {data: 'deskripsi', nama:'deskripsi'},
+                    {data: 'aksi', name: 'aksi', orderable: false, searchable: false}
+                ],
+                // columnDefs: [      
+                //     { "width": "180px", "targets": [2] }
+                // ]
+                // order:[[0,'asc']]
+            });
+
+        });
+    </script>
+@endsection

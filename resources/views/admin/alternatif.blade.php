@@ -18,10 +18,10 @@
     @endif --}}
   <div class="table-hasil">
       <h3>Alternatif</h3>
-      <hr style="width:1150px;">
+      <hr>
       <div class="panel">
             <div class="panel-header">
-              <h3 class="title">Pilih Alternatif</h3>
+              <h3 class="title-center">Data Alternatif</h3>
               <button type="button" id="btn-tambah" class="btn btn-info btn-lg fa fa-plus" data-toggle="modal" data-target="#modal-tambah">&nbsp Tambah</button>
             </div>
               <div class="row">
@@ -32,6 +32,7 @@
                         <tr>
                             <th scope="col">Nama Alternatif</th>
                             <th scope="col">Deskripsi</th>
+                            <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     </table>
@@ -80,18 +81,25 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#table').DataTable({
-                "processing" : true,
-                "serverSide" : true,
-                "ajax" : {
+                processing : true,
+                serverSide : true,
+                scrollY: "300px",
+                scrollX: true,
+                scrollCollapse: true,
+                ajax : {
                     url: "{{route('ad_alternatif')}}",
-                    type: "GET"
                 },
-                "columns": [
+                columns: [
                     {data: 'nama_alternatif' , nama:'nama_alternatif'},
                     {data: 'deskripsi', nama:'deskripsi'},
+                    {data: 'aksi', name: 'aksi', orderable: false, searchable: false}
                 ],
-                order:[[0,'asc']]
+                // columnDefs: [      
+                //     { "width": "200px", "targets": [2] }
+                // ]
+                // order:[[0,'asc']]
             });
+
         });
     </script>
 @endsection

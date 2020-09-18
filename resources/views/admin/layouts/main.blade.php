@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -30,7 +31,7 @@
                 <ul>
                     <li>
                         <a href="{{route('ad_home')}}">
-                            <span class="icon"><i class="fa fa-calculator" aria-hidden="true"></i></span>
+                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
                             <span class="title">Home</span>
                         </a>
                     </li>
@@ -42,8 +43,41 @@
                     </li>
                     <li>
                         <a href="{{route('ad_kriteria')}}">
-                            <span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                            <span class="icon"><i class="fa fa-book" aria-hidden="true"></i></span>
                             <span class="title">Kriteria</span>
+                        </a>
+                    </li>
+                    {{-- <li>
+                        <a href="{{route('ad_kriteria')}}">
+                            <span class="icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            <span class="title">Nilai Bobot</span>
+                        </a>
+                    </li> --}}
+                    <li>
+                        <a href="#" id="nilai-btn">
+                            <span class="icon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            <span class="title">Nilai Bobot</span>
+                            <span class="ikon"><i class="fa fa-caret-down"></i></span>
+                        </a>
+                        <ul id="nilai-show">
+                            <li>
+                                <a href="{{route('ad_pk')}}">
+                                    <span class="icon"><i class="fa fa-play" aria-hidden="true"></i></span>
+                                    <span class="title">Nilai Kriteria</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="icon"><i class="fa fa-play" aria-hidden="true"></i></span>
+                                    <span class="title">Nilai Alternatif</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{{route('ad_peta')}}">
+                            <span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                            <span class="title">Peta</span>
                         </a>
                     </li>
                 </ul>
@@ -70,6 +104,9 @@
             toggle.classList.toggle('active');
             content.classList.toggle('active');
         }
+        $('#nilai-btn').click(function(){
+            $('#nilai-show').toggleClass("show");
+        });
     </script>
     @yield('javascript')
 </body>

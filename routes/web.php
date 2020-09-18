@@ -38,6 +38,9 @@ Route::group(['middleware' => 'admin'], function()
 {
     Route::get('/admin','Admin\HomeController@index')->name('ad_home');
     Route::get('/admin/alternatif','AlternatifController@admin')->name('ad_alternatif');
-    Route::post('/admin/alternatif/action','AlternatifController@action')->name('alternatif_action');
+    //Route::post('/admin/alternatif/action','AlternatifController@action')->name('alternatif_action');
     Route::get('/admin/kriteria','KriteriaController@admin')->name('ad_kriteria');
+    Route::get('/admin/perbandingan-kriteria','PerbandingankriteriaController@admin')->name('ad_pk');
+
+    Route::get('/admin/peta','PetaController@admin')->name('ad_peta');
 });
