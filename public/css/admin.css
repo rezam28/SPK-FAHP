@@ -77,6 +77,7 @@ body
 
 .navigation ul li a:hover
 {
+    padding-left: 10px;
     color: cyan;
     background: #1e1e1e;
     border-left: 4px solid cyan;
@@ -133,7 +134,7 @@ body
 {
     position: relative;
     display: block;
-    padding: 0 10px;
+    /* padding: 0 10px; */
     height: 60px;
     line-height: 60px;
     text-align: start;
@@ -250,6 +251,7 @@ body
     color: aqua;
 }
 
+/* pop up */
 #modal-tambah{
     transition: 0.5s;
 }
@@ -271,9 +273,9 @@ body
 
 .content.active #perbandingan{
     left: 0px;
-    max-width: 1060px;
+    width: 1060px;
     padding: 40px 20px 10px 40px;
-    transition: 0.5s;
+    /* transition: 0.5s; */
 }
 
 #table-perbandingan{
@@ -285,4 +287,5 @@ body
     overflow-x: scroll;
     overflow-y: scroll;
     height: 500px;
+    transition: 0.5s;
 }

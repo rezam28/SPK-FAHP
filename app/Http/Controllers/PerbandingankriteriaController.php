@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kriteria;
 use App\Models\Perbandingankriteria;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,8 @@ class PerbandingankriteriaController extends Controller
 
     public function admin()
     {
-        return view('admin.perbandingan_kriteria');
+        $kriteria = Kriteria::all();
+        return view('admin.perbandingan_kriteria',compact('kriteria',$kriteria));
     }
 
     /**

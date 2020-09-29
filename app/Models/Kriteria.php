@@ -10,4 +10,6 @@ class Kriteria extends Model
     use Notifiable;
     
     protected $table = 'kriteria';
+
+    protected $fillable = ['nama_kriteria','deskripsi'];
 }

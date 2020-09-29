@@ -16,25 +16,25 @@
             </div>
             <div class="input-group">
                 <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                    <option selected>Choose...</option>
+                    <option selected>Pilih</option>
+                    @foreach ($kriteria as $item)
+                        <option value="{{$item['id']}}">{{$item['nama_kriteria']}}</option>
+                    @endforeach
+                </select>
+                <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                    <option selected>Pilih</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                 </select>
                 <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-                <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option selected>Pilih</option>
+                    @foreach ($kriteria as $item)
+                        <option value="{{$item['id']}}">{{$item['nama_kriteria']}}</option>
+                    @endforeach
                 </select>
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="button">Button</button>
+                    <button class="btn btn-success" type="button">Input</button>
                 </div>
             </div>
             <table class="table table-bordered table-striped">

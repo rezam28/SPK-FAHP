@@ -41,6 +41,9 @@ Route::group(['middleware' => 'admin'], function()
     Route::get('/admin/alternatif','AlternatifController@admin')->name('ad_alternatif');
     
     Route::get('/admin/kriteria','KriteriaController@admin')->name('ad_kriteria');
+    Route::post('/admin/kriteria','KriteriaController@store')->name('ad_kriteria');
+    Route::get('/admin/kriteria/{kriteria_id}/edit','KriteriaController@edit');
+    Route::delete('/admin/kriteria{kriteria_id}','KriteriaController@destroy');
 
     Route::get('/admin/perbandingan-kriteria','PerbandingankriteriaController@admin')->name('ad_pk');
 
