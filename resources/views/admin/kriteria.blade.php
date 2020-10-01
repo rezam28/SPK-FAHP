@@ -32,6 +32,7 @@
                     @csrf
                     <thead>
                         <tr>
+                            <th scope="col">Kode</th>
                             <th scope="col">Nama Kriteria</th>
                             <th scope="col">Deskripsi</th>
                             <th scope="col">Aksi</th>
@@ -59,6 +60,12 @@
                           @csrf
                           <input type="hidden" name="kriteria_id" id="kriteria_id" value="" required>
                           <div class="form-group">
+                            <label for="nama">Nama Kode</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" name="kode" id="kode" value="" required>
+                            </div>
+                          </div>
+                          <div class="form-group">
                             <label for="nama">Nama Kriteria</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" name="nama_kriteria" id="nama_kriteria" value="" required>
@@ -75,10 +82,6 @@
                             <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
                         </div>
                     </form>
-                    {{-- <div class="modal-footer">
-                        <button type="button" id="tambah" class="btn btn-success" data-dismiss="modal" value="tambah">Tambah</button>
-                        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
-                    </div> --}}
                 </div>
               </div>
           </div>
@@ -138,12 +141,13 @@
                 url: "{{route('ad_kriteria')}}",
             },
             columns: [
+                {data: 'Kode' , nama: 'Kode'},
                 {data: 'nama_kriteria' , nama:'nama_kriteria'},
-                {data: 'deskripsi', nama:'deskripsi'},
+                {data: 'deskripsi', nama:'deskripsi',orderable: false},
                 {data: 'aksi', name: 'aksi', orderable: false, searchable: false}
             ],
             columnDefs: [      
-                { "width": "139px", "targets": [2] }
+                { "width": "140px", "targets": [3] }
             ]
             // order:[[0,'asc']]
         });
@@ -197,10 +201,11 @@
         var kriteria_id = $(this).data('id');
         $.get('{{ url('/admin/kriteria') }}' +'/' + kriteria_id + '/edit', function (data) {
             $('#modal-title').html("Edit Kriteria");
-            $('#btn_tambah').val("edit_kriteria");
+            $('#btn_simpan').val("edit_kriteria");
             $('#modal-tambah').modal('show');
 
             $('#kriteria_id').val(data.id);
+            $('#kode').val(data.id);
             $('#nama_kriteria').val(data.nama_kriteria);
             $('#deskripsi').val(data.deskripsi);
         })

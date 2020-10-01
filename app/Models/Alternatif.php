@@ -10,4 +10,6 @@ class Alternatif extends Model
     use Notifiable;
     
     protected $table = 'alternatif';
+
+    protected $fillable = ['Kode','nama_alternatif','deskripsi'];
 }

@@ -21,35 +21,42 @@ class AlternatifController extends Controller
         $alternatif = Alternatif::all();
         if ($request->ajax()) {
             return DataTables::of($alternatif)
-            ->addColumn('aksi', function($row){
-                return '<button type="button" id="btn-edit" class="btn btn-warning btn-lg fa fa-pencil" data-toggle="modal" data-target="#modal-tambah">Edit</button>
-                        <button type="button" id="btn-delete" class="btn btn-danger btn-lg fa fa-trash" data-toggle="modal" data-target="#modal-tambah">&nbspDelete</button>';
+            ->addColumn('aksi', function($data){
+                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$data->id.'" data-original-title="Edit" class="edit btn btn-warning btn-sm edit-alternatif"><i class="fa fa-pencil"></i> Edit</a>';
+                $btn .= '&nbsp';'&nbsp';
+                $btn .= '<button type="button" name="delete" id="'.$data->id.'" class="delete btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button>';
+                return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
         }
         return view('admin.alternatif');
     }
-    // public function action(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         if ($request->action == 'edit') {
-    //             $data = array(
-    //                 'nama_alternatif' => $request -> nama_alternatif,
-    //                 'deskripsi' => $request -> deskripsi
-    //             );
-    //             DB::table('alternatif')
-    // 				->where('id', $request->id)
-    // 				->update($data);
-    //         }
 
-    //         if($request->action == 'delete')
-    // 		{
-    // 			DB::table('alternatif')
-    // 				->where('id', $request->id)
-    // 				->delete();
-    // 		}
-    //         return response()->json($request);
-    //     }
-    // }
+    public function store(Request $request)
+    {
+        //$id = $request ->id;
+        $post = Alternatif::updateOrCreate(['id' => $request->alternatif_id],
+            [   
+                'Kode' => $request->kode,
+                'nama_alternatif' => $request->nama_alternatif, 
+                'deskripsi' => $request->deskripsi
+            ]);        
+        return response()->json($post);
+    }
+
+    public function edit($id)
+    {
+        $where = array('id' => $id);
+        $post  = Alternatif::where($where)->first();
+     
+        return response()->json($post);
+    }
+
+    public function destroy($id)
+    {
+        Alternatif::find($id)->delete();
+        return response()->json();
+
+    }
 }
