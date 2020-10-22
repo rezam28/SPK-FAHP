@@ -12,4 +12,9 @@ class Kriteria extends Model
     protected $table = 'kriteria';
 
     protected $fillable = ['Kode','nama_kriteria','deskripsi'];
+    
+    function perbandingankriteria()
+    {
+        return $this->hasMany('App\Models\Perbandingankriteria');
+    }
 }

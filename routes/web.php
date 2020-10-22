@@ -37,19 +37,25 @@ Route::group(['middleware' => 'logged'], function()
 Route::group(['middleware' => 'admin'], function()
 {
     Route::get('/admin','Admin\HomeController@index')->name('ad_home');
-    
+
+    //Alternatif
     Route::get('/admin/alternatif','AlternatifController@admin')->name('ad_alternatif');
     Route::post('/admin/alternatif','AlternatifController@store')->name('ad_alternatif');
     Route::get('/admin/alternatif/{alternatif_id}/edit','AlternatifController@edit');
     Route::delete('/admin/alternatif{alternatif_id}','AlternatifController@destroy');
     
+    //Kriteria
     Route::get('/admin/kriteria','KriteriaController@admin')->name('ad_kriteria');
     Route::post('/admin/kriteria','KriteriaController@store')->name('ad_kriteria');
     Route::get('/admin/kriteria/{kriteria_id}/edit','KriteriaController@edit');
     Route::delete('/admin/kriteria{kriteria_id}','KriteriaController@destroy');
 
+    //Perbandingan Kriteria
     Route::get('/admin/perbandingan-kriteria','PerbandingankriteriaController@admin')->name('ad_pk');
-
+    Route::post('/admin/perbandingan-kriteria','PerbandingankriteriaController@store')->name('ad_pk');
+    Route::get('/admin/perbandingan-kriteria/{daerah}','PerbandingankriteriaController@daerah');
+    
+    //Perbandingan Alternatif
     Route::get('/admin/perbandingan-alternatif','PerbandinganalternatifController@admin')->name('ad_pa');
 
     Route::get('/admin/peta','PetaController@admin')->name('ad_peta');

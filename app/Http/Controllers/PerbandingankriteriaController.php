@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\Daerah;
 use App\Models\Kriteria;
 use App\Models\Perbandingankriteria;
 use Illuminate\Http\Request;
@@ -18,75 +19,37 @@ class PerbandingankriteriaController extends Controller
         //
     }
 
-    public function admin()
+    public function admin(Request $request)
     {
+        $perbandingan = Perbandingankriteria::all();
         $kriteria = Kriteria::all();
-        return view('admin.perbandingan_kriteria',compact('kriteria',$kriteria));
+        $daerah = Daerah::all();
+        // if ($request->ajax()) {
+        //     return DataTables::of($perbandingan)
+        //     ->rawColumns(['aksi'])
+        //     ->make(true);
+        // }
+        return view('admin.perbandingan_kriteria',compact('kriteria',$kriteria,
+                                                          'perbandingan',$perbandingan,
+                                                          'daerah',$daerah
+        ));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function daerah($daerah)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Perbandingankriteria  $perbandingankriteria
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Perbandingankriteria $perbandingankriteria)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Perbandingankriteria  $perbandingankriteria
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Perbandingankriteria $perbandingankriteria)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Perbandingankriteria  $perbandingankriteria
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Perbandingankriteria $perbandingankriteria)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Perbandingankriteria  $perbandingankriteria
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Perbandingankriteria $perbandingankriteria)
-    {
-        //
+        //$kriteria = Kriteria::all();
+        // $nama_kriteria = $kriteria->pluck('nama_kriteria');
+        // $kode = $kriteria->pluck('kode'); 
+        
+        if($daerah==0){
+            $post = Perbandingankriteria::all();
+        }else{
+            $post = Perbandingankriteria::where('daerah_id','=',$daerah)->get();
+        }
+        // $response = [
+        //     'kriteria' => $kriteria,
+        //     'perbandingan' => $post
+        // ];
+        //return json_encode($response);
+        return response()->json($post);
     }
 }

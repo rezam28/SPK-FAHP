@@ -141,7 +141,7 @@
                 url: "{{route('ad_kriteria')}}",
             },
             columns: [
-                {data: 'Kode' , nama: 'Kode'},
+                {data: 'kode' , nama: 'kode'},
                 {data: 'nama_kriteria' , nama:'nama_kriteria'},
                 {data: 'deskripsi', nama:'deskripsi',orderable: false},
                 {data: 'aksi', name: 'aksi', orderable: false, searchable: false}
@@ -205,7 +205,7 @@
             $('#modal-tambah').modal('show');
 
             $('#kriteria_id').val(data.id);
-            $('#kode').val(data.id);
+            $('#kode').val(data.kode);
             $('#nama_kriteria').val(data.nama_kriteria);
             $('#deskripsi').val(data.deskripsi);
         })

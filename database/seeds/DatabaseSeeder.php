@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             AlternatifSeeder::class,
             KriteriaSeeder::class,
+            DaerahSeeder::class,
             ]);
     }
 }
