@@ -7,6 +7,8 @@ use Illuminate\Notifications\Notifiable;
 
 class Perbandingankriteria extends Model
 {
+    protected $fillable = ['kriteria1_id', 'nilai', 'kriteria2_id','daerah_id'];
+
     protected $table = 'perbandingan_kriteria';
 
     protected $with = ['kriteria1', 'kriteria2', 'daerah'];

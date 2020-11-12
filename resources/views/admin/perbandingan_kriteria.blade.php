@@ -31,15 +31,17 @@
                 <h3 class="title-center">Data Perbandingan Kriteria</h3>
             </div>
             <div class="input-group">
-                <select class="custom-select" name="daerah" id="daerah" required>
-                    <option value="" selected disabled>Pilih Daerah</option>
-                    @foreach ($daerah as $item)
-                        <option value="{{$item['id']}}">{{$item['nama_daerah']}}</option>
-                    @endforeach
-                </select>
-                <form action="{{route('ad_pk')}}" method="POST" id="form_perbandingan_kriteria">
+                
+                <form id="form_perbandingan_kriteria" name="form_perbandingan_kriteria" name="form-horizontal">
                     @csrf
                     <input type="hidden" name="perbandingan_id" id="perbandingan_id" value="" required>
+                    <select class="custom-select" name="daerah" id="daerah" required>
+                        <option value="" selected disabled>Pilih Daerah</option>
+                        @foreach ($daerah as $item)
+                            <option value="{{$item['id']}}">{{$item['nama_daerah']}}</option>
+                        @endforeach
+                    </select>
+                    
                     <select class="custom-select" id="kriteria1" name="kriteria1" required>
                         <option value="" selected disabled>Pilih Kriteria</option>
                         @foreach ($kriteria as $item)
@@ -65,7 +67,7 @@
                         @endforeach
                     </select>
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-success" type="button">Input</button>
+                        <button type="submit" class="btn btn-success" type="button" id="btn_simpan">Input</button>
                     </div>
                 </form>
             </div>
@@ -121,42 +123,37 @@
         $('#table_perbandingan_kriteria').removeAttr('hidden');
         $('#pilih_daerah').attr('hidden',true);
         $('#nilai_perbandingan').empty();
-        //var daerah = $("#daerah option:selected").val();
-        // alert(daerah);
-        //console.log(daerah);
-        /* $.ajax({
-            type: "GET",
-            url: "{{url('admin/perbandingan-kriteria')}}/'"+ daerah,
-            data: {daerah: daerah },
-            success: function (data) {
-                $.each(data, function(key, value){
-                    console.log(data);
-                    //$('#nilai_perbandingan').html(data);
-                    $('#nilai_perbandingan').append("<tr><th>"+data['kode']+"</th><td>"+data['nilai']+"</td> </tr>");                   
-                });
-            }
-        });*/ 
-        $.get('{{url('admin/perbandingan-kriteria')}}/'+ daerah,function (data) {                
-            // $.each(data /* JSON.parse(data) */, function(key, value){
-            //     //console.log(data);
-            //     //$('#nilai_perbandingan').append("<tr><th>"+data['kode']+"</th><td>"+data['nilai']+"</td> </tr>");                   
-            // });
-            // let kriteria = data.kriteria;
-            // let perbandingan = data.perbandingan;
-            // let nilai = "";
-            // console.log(perbandingan);
-            console.log(data);
+        
+        $.get('{{url('admin/perbandingan-kriteria')}}/'+ daerah,function (data) {
+            //console.log(data);
             $.each(data, function (indexInArray, v) {
-                //console.log(valueOfElement);
-                //$('#nilai_perbandingan').html(data);
                 $('#nilai_perbandingan').append("<tr><td>"+v.kriteria1.kode+'&nbsp'+'-'+'&nbsp'+v.kriteria1.nama_kriteria+ "</td><td>"+v.nilai+"</td><td>"+v.kriteria2.kode +'&nbsp'+'-'+'&nbsp'+ v.kriteria2.nama_kriteria+"</td> </tr>");
             });
-            // for (let i = 0; i < kriteria.length; i++) {
-            //     $kode = kriteria[i].kode;
-            //     $('#nilai_perbandingan').append("<tr><th>"+kode+"</th><td>"+perbandingan[nilai]+"</td> </tr>");
-            // }
-            //$('#nilai_perbandingan').append("<tr>"+nilai+"<td>"+perbandingan[nilai]+"</td> </tr>");
         });
     });
+
+    if($('#form_perbandingan_kriteria').length > 0) {
+        $('#form_perbandingan_kriteria').validate({
+            submitHandler: function(data){
+                $('#btn_simpan').html('Sending..');
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('ad_pk') }}",
+                    data: $('#form_perbandingan_kriteria').serialize(),
+                    dataType: "json",
+                    success: function (response) {
+                        $('#form_perbandingan_kriteria').trigger('reset');
+                        $('#btn_simpan').html('Input');
+                        var Table = $('#table_perbandingan_kriteria').dataTable(); //inialisasi datatable
+                        Table.fnDraw(false); //reset datatable
+                        console.log(response);
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
+            }
+        })
+    }
     </script>
 @endsection

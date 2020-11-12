@@ -36,20 +36,26 @@ class PerbandingankriteriaController extends Controller
     }
     public function daerah($daerah)
     {
-        //$kriteria = Kriteria::all();
-        // $nama_kriteria = $kriteria->pluck('nama_kriteria');
-        // $kode = $kriteria->pluck('kode'); 
-        
         if($daerah==0){
             $post = Perbandingankriteria::all();
         }else{
             $post = Perbandingankriteria::where('daerah_id','=',$daerah)->get();
         }
-        // $response = [
-        //     'kriteria' => $kriteria,
-        //     'perbandingan' => $post
-        // ];
-        //return json_encode($response);
         return response()->json($post);
+    }
+
+    public function store(Request $request)
+    {
+
+        $data = Perbandingankriteria::updateOrCreate(['id' => $request->perbandingan_id],
+            [
+                'daerah_id' => $request->daerah,
+                'kriteria1_id' => $request->kriteria1,
+                'nilai' => $request->nilai,
+                'kriteria2_id' => $request->kriteria2
+            ]
+        );
+
+        return response()->json($data);
     }
 }
