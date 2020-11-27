@@ -71,23 +71,27 @@
                     </div>
                 </form>
             </div>
-            <h1 id="pilih_daerah">Pilih Daerah</h1>
-            <table class="table table-bordered table-striped table-responsive-md" id="table_perbandingan_kriteria" hidden>
+            {{-- <h1 id="pilih_daerah">Pilih Daerah</h1> --}}
+            <table class="table table-bordered table-striped table-responsive-md" id="table_perbandingan_kriteria">
                 <thead>
                     <tr>
+                        <th scope="row">No</th>
+                        <th scope="row">Daerah</th>
                         <th scope="row">Kriteria 1</th>
                         <th scope="row">Nilai</th>
                         <th scope="row">Kriteria 2</th>
                     </tr>
                 </thead>
                 <tbody id="nilai_perbandingan">
-                    {{-- @foreach ($perbandingan as $item)
+                    @foreach ($perbandingan as $item)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->daerah->nama_daerah}}</td>
                             <td>{{ $item->kriteria1->kode}} - {{ $item->kriteria1->nama_kriteria }}</td>
                             <td>{{ $item['nilai'] }}</td>
                             <td>{{ $item->kriteria2->kode }} - {{ $item->kriteria2->nama_kriteria }}</td>
                         </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -115,7 +119,17 @@
     });
 
     $(document).ready(function () {
-        var table = $('#table_perbandingan_kriteria').DataTable();
+        var table = $('#table_perbandingan_kriteria').DataTable({
+            "bPaginate": true,
+            "bJQueryUI": true, // ThemeRoller-stöd
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": true,
+            "bAutoWidth": true,
+            "bProcessing": true,
+            "iDisplayLength": 10,
+        });
     });
 
     $('#daerah').on('change', function() {
@@ -127,7 +141,7 @@
         $.get('{{url('admin/perbandingan-kriteria')}}/'+ daerah,function (data) {
             //console.log(data);
             $.each(data, function (indexInArray, v) {
-                $('#nilai_perbandingan').append("<tr><td>"+v.kriteria1.kode+'&nbsp'+'-'+'&nbsp'+v.kriteria1.nama_kriteria+ "</td><td>"+v.nilai+"</td><td>"+v.kriteria2.kode +'&nbsp'+'-'+'&nbsp'+ v.kriteria2.nama_kriteria+"</td> </tr>");
+                $('#nilai_perbandingan').append("<tr><td>"+(indexInArray+1)+"</td><td>"+v.daerah.nama_daerah+"</td><td>"+v.kriteria1.kode+'&nbsp'+'-'+'&nbsp'+v.kriteria1.nama_kriteria+ "</td><td>"+v.nilai+"</td><td>"+v.kriteria2.kode +'&nbsp'+'-'+'&nbsp'+ v.kriteria2.nama_kriteria+"</td> </tr>");
             });
         });
     });
@@ -144,12 +158,13 @@
                     success: function (response) {
                         $('#form_perbandingan_kriteria').trigger('reset');
                         $('#btn_simpan').html('Input');
-                        var Table = $('#table_perbandingan_kriteria').dataTable(); //inialisasi datatable
-                        Table.fnDraw(false); //reset datatable
-                        console.log(response);
+                        var table = $('#table_perbandingan_kriteria').dataTable(); //inialisasi datatable
+                        //table.fnDraw(false); //reset datatable
+                        table.ajax.reload();
                     },
                     error: function(response){
                         console.log(response);
+                        $('#btn_simpan').html('Input');
                     }
                 });
             }

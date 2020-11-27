@@ -24,11 +24,10 @@ class PerbandingankriteriaController extends Controller
         $perbandingan = Perbandingankriteria::all();
         $kriteria = Kriteria::all();
         $daerah = Daerah::all();
-        // if ($request->ajax()) {
-        //     return DataTables::of($perbandingan)
-        //     ->rawColumns(['aksi'])
-        //     ->make(true);
-        // }
+        if ($request->ajax()) {
+            return DataTables::of($perbandingan)->make(true);
+        }
+        //return json_encode($perbandingan);
         return view('admin.perbandingan_kriteria',compact('kriteria',$kriteria,
                                                           'perbandingan',$perbandingan,
                                                           'daerah',$daerah
@@ -46,8 +45,7 @@ class PerbandingankriteriaController extends Controller
 
     public function store(Request $request)
     {
-
-        $data = Perbandingankriteria::updateOrCreate(['id' => $request->perbandingan_id],
+        $data = Perbandingankriteria::updateOrCreate(['daerah_id' => $request->daerah, 'kriteria1_id' => $request->kriteria1,'kriteria2_id' => $request->kriteria2],
             [
                 'daerah_id' => $request->daerah,
                 'kriteria1_id' => $request->kriteria1,
