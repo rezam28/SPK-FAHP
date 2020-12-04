@@ -131,7 +131,7 @@
     });
 
     $(document).ready(function() {
-        var table = $('#table').DataTable({
+        $('#table').DataTable({
             processing : true,
             serverSide : true,
             scrollY: true,

@@ -7,6 +7,8 @@ use Illuminate\Notifications\Notifiable;
 
 class Perbandingankriteria extends Model
 {
+    use Notifiable;
+
     protected $fillable = ['kriteria1_id', 'nilai', 'kriteria2_id','daerah_id'];
 
     protected $table = 'perbandingan_kriteria';
@@ -27,4 +29,9 @@ class Perbandingankriteria extends Model
     {       
         return $this->belongsTo('App\Models\daerah', 'daerah_id','id');
     }
+
+    // public function nilai()
+    // {
+    //     return $this->belongsTo('App\Models\Nilai','nilai_id');
+    // }
 }

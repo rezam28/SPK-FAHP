@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Daerah extends Model
+class Nilai extends Model
 {
     use Notifiable;
     
-    protected $table = 'daerah';
+    protected $table = 'nilai';
 
-    protected $fillable = ['nama_daerah'];
-
+    protected $fillable = ['nilai','l', 'm', 'u'];
+    
     function perbandingankriteria()
     {
         return $this->hasMany('App\Models\Perbandingankriteria');

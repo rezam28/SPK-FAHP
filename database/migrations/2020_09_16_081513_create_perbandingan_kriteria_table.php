@@ -22,6 +22,7 @@ class CreatePerbandinganKriteriaTable extends Migration
             $table->unsignedBigInteger('daerah_id')->unsigned();
             $table->double('nilai');
             $table->timestamps();
+            //$table->foreign('nilai_id')->references('id')->on('nilai');
             $table->foreign('kriteria1_id')->references('id')->on('kriteria');
             $table->foreign('kriteria2_id')->references('id')->on('kriteria');
             $table->foreign('daerah_id')->references('id')->on('daerah');

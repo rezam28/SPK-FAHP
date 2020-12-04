@@ -255,12 +255,12 @@ body
 #modal-tambah{
     transition: 0.5s;
 }
-@media only screen and (max-width: 740px){
+/* @media only screen and (max-width: 740px){
     body{
         width: 740px;
         background: aqua;
     }
-}
+} */
 
 /* Table Perbandingan Kriteria&alternatif */
 
@@ -278,7 +278,7 @@ body
     /* transition: 0.5s; */
 }
 
-#table-perbandingan{
+/* #table-perbandingan{
     left: 0;
     padding: 20px 20px 10px 20px;
     margin-bottom: 25px;
@@ -288,4 +288,4 @@ body
     overflow-y: scroll;
     height: 500px;
     transition: 0.5s;
-}
+} */
