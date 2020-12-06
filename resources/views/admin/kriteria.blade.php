@@ -21,7 +21,7 @@
   <div class="table-hasil">
       <h3>Kriteria</h3>
       <hr>
-      <div class="panel">
+      <div class="panel panel-default">
             <div class="panel-header">
               <h3 class="title-center">Data Kriteria</h3>
               <a class="btn btn-success" href="javascript:void(0)" id="tambahkriteria"> Tambah</a>

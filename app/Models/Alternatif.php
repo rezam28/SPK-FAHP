@@ -12,4 +12,9 @@ class Alternatif extends Model
     protected $table = 'alternatif';
 
     protected $fillable = ['Kode','nama_alternatif','deskripsi'];
+
+    function perbandinganalternatif()
+    {
+        return $this->hasMany('App\Models\Perbandinganalternatif');
+    }
 }

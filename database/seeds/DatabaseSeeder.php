@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
             AlternatifSeeder::class,
             KriteriaSeeder::class,
             DaerahSeeder::class,
-            //NilaiSeeder::class,
             PerKriteriaSeeder::class,
+            PerAlternatifSeeder::class,
             ]);
     }
 }

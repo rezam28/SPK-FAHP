@@ -58,6 +58,9 @@ Route::group(['middleware' => 'admin'], function()
     
     //Perbandingan Alternatif
     Route::get('/admin/perbandingan-alternatif','PerbandinganalternatifController@admin')->name('ad_pa');
+    Route::post('/admin/perbandingan-alternatif','PerbandinganalternatifController@store')->name('ad_pa');
+    Route::get('/admin/perbandingan-alternatif/{kriteria}','PerbandinganalternatifController@kriteria');
+    Route::delete('/admin/perbandingan-alternatif{perbandinganalternatif_id}','PerbandinganalternatifController@destroy');
 
     Route::get('/admin/peta','PetaController@admin')->name('ad_peta');
 });

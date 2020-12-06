@@ -17,4 +17,9 @@ class Kriteria extends Model
     {
         return $this->hasMany('App\Models\Perbandingankriteria');
     }
+
+    function perbandinganalternatif()
+    {
+        return $this->hasMany('App\Models\Perbandinganalternatif');
+    }
 }
