@@ -5,7 +5,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
-    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" langukriteria="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <style>
         select:required:invalid {
             color: gray;
@@ -62,7 +62,7 @@
                             <option value="8">8</option>
                             <option value="9">9</option>
                         </select>
-                        <select class="custom-select" id="alternatif" name="alternatif" required>
+                        <select class="custom-select" id="alternatif2" name="alternatif2" required>
                             <option value="" selected disabled>Plih Alternatif</option>
                             @foreach ($alternatif as $item)
                                 <option value="{{$item->id}}">{{$item->nama_alternatif}}</option>
@@ -170,8 +170,8 @@
 @section('javascript')
 
 
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" langukriteria="javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" langukriteria="javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"
         integrity="sha256-sPB0F50YUDK0otDnsfNHawYmA5M0pjjUf4TvRJkGFrI=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"
@@ -213,27 +213,122 @@
     //     let daerah = $(this).val(); //daerahID
     //     $('#nilai_perbandingan').empty();        
     // });
-    $('#kriteria').on('change',function () {
-        let kriteria = $(this).val(); //kriteriaID
-        let daerah = $('#daerah').val(); //daerahID  
-        $('#nilai_perbandingan').empty();
-        $.get('{{url('admin/perbandingan-alternatif')}}/'+ kriteria,{daerah : daerah, kriteria : kriteria},function (data) {
-        console.log(data);
-            $.each(data, function (indexInArray, v) {
-                var tr = '<tr>';
-                tr += '<td>'+(indexInArray+1)+'</td>';
-                tr += '<td>'+v.daerah.nama_daerah+'</td>';
-                tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
-                tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
-                tr += '<td>'+v.nilai+'</td>';
-                tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
-                tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
-                tr += '</tr>';
-                $('#nilai_perbandingan').append(tr);
-                //console.log(v.nilai);
-                //$('#nilai_perbandingan').append("<tr><td>"+(indexInArray+1)+"</td><td>"+v.daerah.nama_daerah+"</td><td>"+v.kriteria1.kode+'&nbsp'+'-'+'&nbsp'+v.kriteria1.nama_kriteria+ "</td><td>"+v.nilai+"</td><td>"+v.kriteria2.kode +'&nbsp'+'-'+'&nbsp'+ v.kriteria2.nama_kriteria+"</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapusmodal">Hapus</button></td></tr>");
-            });
+
+    $(document).ready(function () {
+        $("#daerah,#kriteria").on("change", function () {
+            let kriteria = $('#kriteria').val(); //kriteriaID
+            let daerah = $('#daerah').val(); //daerahID
+            SearchData(daerah, kriteria)
+            // console.log(kriteria);
+            // console.log(daerah);
+            $('#nilai_perbandingan').empty();
         });
+    });
+
+    function SearchData(daerah, kriteria) {
+        if (daerah == 0 && kriteria == 0) {
+            //$('#table11 tbody tr').show();
+            $.get('{{url('admin/perbandingan-alternatif')}}/'+ kriteria,{daerah : daerah, kriteria : kriteria},function (data) {
+            console.log(data);
+                $.each(data, function (indexInArray, v) {
+                    var tr = '<tr>';
+                    tr += '<td>'+(indexInArray+1)+'</td>';
+                    tr += '<td>'+v.daerah.nama_daerah+'</td>';
+                    tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
+                    tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
+                    tr += '<td>'+v.nilai+'</td>';
+                    tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
+                    tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
+                    tr += '</tr>';
+                    $('#nilai_perbandingan').append(tr);
+                });
+            });
+        } else {
+            $.get('{{url('admin/perbandingan-alternatif')}}/'+ kriteria,{daerah : daerah, kriteria : kriteria},function (data) {
+                //console.log(data);
+                $.each(data, function (indexInArray, v) {
+                    if (daerah != 0 && kriteria != 0) {
+                        var tr = '<tr>';
+                        tr += '<td>'+(indexInArray+1)+'</td>';
+                        tr += '<td>'+v.daerah.nama_daerah+'</td>';
+                        tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
+                        tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
+                        tr += '<td>'+v.nilai+'</td>';
+                        tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
+                        tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
+                        tr += '</tr>';
+                        $('#nilai_perbandingan').append(tr);
+                        // if (rowdaerah.toUpperCase() == daerah && rowkriteria == kriteria) {
+                        //     $(this).show();
+                        // } else {
+                        //     $(this).hide();
+                        // }
+                    } else if (daerah != 0 || kriteria != 0) {
+                        var tr = '<tr>';
+                        tr += '<td>'+(indexInArray+1)+'</td>';
+                        tr += '<td>'+v.daerah.nama_daerah+'</td>';
+                        tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
+                        tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
+                        tr += '<td>'+v.nilai+'</td>';
+                        tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
+                        tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
+                        tr += '</tr>';
+                        $('#nilai_perbandingan').append(tr);
+                    }
+                });
+            });
+        }
+    }
+
+    if($('#form_perbandingan_alternatif').length > 0) {
+        $('#form_perbandingan_alternatif').validate({
+            submitHandler: function(data){
+                $('#btn_simpan').html('Sending..');
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('ad_pa') }}",
+                    data: $('#form_perbandingan_alternatif').serialize(),
+                    dataType: "json",
+                    success: function (response) {
+                        $('#form_perbandingan_alternatif').trigger('reset');
+                        $('#btn_simpan').html('Input');
+                        var table = $('#table_perbandingan_alternatif').dataTable(); //inialisasi datatable
+                        // table.fnDraw(false); //reset datatable
+                        table.reload();
+                    },
+                    error: function(response){
+                        console.log(response);
+                        $('#btn_simpan').html('Input');
+                    }
+                });
+            }
+        })
+    }
+
+    $(document).on('click', '.delete', function () {
+        dataId = $(this).attr('id');
+        $('#hapusmodal').modal('show');
+        //console.log(dataId);
+    });
+
+    $('#tombol-hapus').click(function () {
+        $.ajax({
+            type: 'DELETE',
+            url: "{{url('/admin/perbandingan-alternatif')}}" + dataId, //eksekusi ajax ke url ini
+            beforeSend: function () {
+                $('#tombol-hapus').text('Hapus Data'); //set text untuk tombol hapus
+            },
+            success: function (data) { //jika sukses
+                setTimeout(function () {
+                    $('#hapusmodal').modal('hide'); //sembunyikan konfirmasi hapus modal
+                    var Table = $('#table_perbandingan_alternatif').dataTable();
+                    Table.fnDraw(false); //reset datatable
+                });
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        })
     });
     </script>
 @endsection
