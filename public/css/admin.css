@@ -275,17 +275,58 @@ body
     left: 0px;
     width: 1060px;
     padding: 40px 20px 10px 40px;
-    /* transition: 0.5s; */
+    transition: 0.5s;
 }
 
-/* #table-perbandingan{
+/* peta */
+
+.peta-panel{
     left: 0;
     padding: 20px 20px 10px 20px;
-    margin-bottom: 25px;
-    background: #ffffff;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    overflow-x: scroll;
-    overflow-y: scroll;
+    /* height: 535px; */
+    width: 1200px;
+}
+
+.content.active .peta-panel{
+    left: 0;
+    padding: 20px 20px 10px 20px;
+    /* height: 1060px; */
+    width: 700px;
+}
+
+.content .peta-panel .peta{
     height: 500px;
+    width: 900px;
     transition: 0.5s;
-} */
+}
+
+.content.active .peta{
+    height: 500px;
+    width: 760px;
+}
+
+.form-panel-peta{
+    position: absolute;
+    top: 0px;
+    left: 910px;
+    width: 280px;
+    margin: 20px 20px 10px 20px;
+    padding: 20px 20px 10px 20px;
+    background: #ffffff;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: 0.5s;
+}
+
+.content.active .form-panel-peta{
+    position: absolute;
+    top: 0px;
+    left: 770px;
+    width: 280px;
+    margin: 20px 20px 10px 20px;
+    padding: 20px 20px 10px 20px;
+    background: #ffffff;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: 0.5s;
+}

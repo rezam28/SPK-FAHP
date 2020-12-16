@@ -3,35 +3,68 @@
 @section('title',"Admin - PETA")
 
 @section('css')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
-<style type="text/css">
-    #peta{
-        height: 535px;
-        width: 1220px;
-    }
-</style>
+
 @endsection
 
 @section('content')
-<div id="peta"></div>
+    <div id="peta-panel" class="peta-panel" >
+        <div id="peta" class="peta"></div>
+    </div>
+    <div class="form-panel-peta">
+        <div class="form-group">
+            <label>Nama Tempat <span class="text-danger">*</span></label>
+            <input class="form-control" type="text" name="nama_tempat" value=""/>
+        </div>
+        <div class="form-group">
+            <label>Longitude <span class="text-danger">*</span></label>
+            <input class="form-control" type="text" name="nama_tempat" value=""/>
+        </div>
+        <div class="form-group">
+            <label>Latitude <span class="text-danger">*</span></label>
+            <input class="form-control" type="text" name="nama_tempat" value=""/>
+        </div>
+        <div class="form-group">
+            <label>Keterangan</label>
+            <textarea style="width:240px" class="mce" name="keterangan"></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Simpan</button>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')
-<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1wZZqn8OiFRUNDR3MSMHS32NvGwknVDI&callback=initMap" async defer></script>
 <script type="text/javascript">
-    var mapOptions = {
-        center: [-7.4478, 112.7183],
-        zoom: 12.5
-    }
+	function initMap() {
+        var marker;
+		var map = new google.maps.Map(document.getElementById('peta'), {
+		  center: {lat: -7.472613, lng: 112.667542},
+		  zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        var icon = {
+            url: "https://img.icons8.com/material-sharp/48/fa314a/marker.png", // url
+            
+        }
+        google.maps.event.addListener(map, 'click', function(event) {
+            console.log(marker);
+            latLng = event.latLng;
 
-    var peta = new L.map('peta', mapOptions);
+            console.log(event.latLng.lat());
+            console.log(event.latLng.lng());
+            if (marker && marker.setMap) {
+                marker.setMap(null);
+            }
 
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-    }).addTo(peta);
-
+            marker = new google.maps.Marker({
+                position: latLng, 
+                map: map,
+                title: 'Click to zoom',
+                icon: icon,
+                draggable: true,
+            });
+        });
+	}
 </script>
 @endsection

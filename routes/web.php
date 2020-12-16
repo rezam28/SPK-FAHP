@@ -20,10 +20,18 @@ Route::get('/home', function () {
 Route::get('/', function () {
     return redirect('/peta');
 });
+
+//peta
 Route::get('/peta','PetaController@index')->name('peta');
+
+//hasil
 Route::get('/hasil','HasilController@index')->name('hasil');
 Route::post('/hasil','HasilController@hasil')->name('hasil');
+
+//alternatif
 Route::get('/alternatif','AlternatifController@index')->name('alternatif');
+
+//kriteria
 Route::get('/kriteria','KriteriaController@index')->name('kriteria');
 
 Route::get('/logout','LoginController@Logout')->name('logout');

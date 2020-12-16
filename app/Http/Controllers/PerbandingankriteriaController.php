@@ -41,6 +41,17 @@ class PerbandingankriteriaController extends Controller
 
     public function store(Request $request)
     {
+        $perkriteria = Perbandingankriteria::all();
+        if ($request->input("kriteria1") == $request->input("kriteria2")) {
+            $data = Perbandingankriteria::updateOrCreate(['daerah_id' => $request->daerah, 'kriteria1_id' => $request->input("kriteria1"),'kriteria2_id' => $request->input("kriteria2")],
+                    [
+                        'daerah_id' => $request->daerah,
+                        'kriteria1_id' => $request->input("kriteria1"),
+                        'nilai' => $request->nilai,
+                        'kriteria2_id' => $request->input("kriteria2")
+                    ],
+                );
+        }else
         for ($i=1; $i<=2 ; $i++) { 
             if ($i = 1) {
                 $data = Perbandingankriteria::updateOrCreate(['daerah_id' => $request->daerah, 'kriteria1_id' => $request->input("kriteria1"),'kriteria2_id' => $request->input("kriteria2")],

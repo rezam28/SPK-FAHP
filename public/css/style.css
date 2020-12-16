@@ -191,22 +191,28 @@ body
     font-family: roboto;
 }
 
-.panel,.panel2
+.panel
 {
-    padding: 20px 10px 10px 20px;
+    /* padding: 0px 20px 10px 20px; */
     margin-bottom: 25px;
     background: #ffffff;
-    border-radius: 15px 15px 15px 15px;
+    border-radius: 10px 10px 15px 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     /* box-shadow: 6px -4px 16px -1px rgba(103,101,112,0.68); */
     max-width: 1100px;
     margin-left: 20px;
 }
 
+.panel-content{
+    padding: 0px 20px 10px 20px;
+}
 .panel-header
 {
-    background: #009879;
-    color: #ffffff;
+    padding-top: 5px;
+    text-align: center;
+    /* background:#9FF9B2; */
+    color: black;
+    border-radius: 5px 5px 0px 0px;
 }
 
 .form-hasil thead tr
@@ -215,7 +221,7 @@ body
     color: gray;
 }
 
-.btn-hasil
+#btn_pilih
 {
     display: inline-block;
     border-radius: 2em;
@@ -230,13 +236,32 @@ body
     background-color: #009879; 
     color: white; 
 }
-.btn-hasil:hover
+#btn_pilih:hover
 {
     border-color: white;
 }
-@media only screen and (max-width: 740px){
+
+.daerah{
+    padding: 0px 0px 10px 0px;
+}
+
+select:required:invalid {
+    color: gray;
+}
+option[value=""][disabled] {
+    display: none;
+}
+option {
+    color: black;
+}
+
+.error {
+    color: red;
+    margin-top: 6px;
+  }
+/* @media only screen and (max-width: 740px){
     body{
         width: 740px;
         background: aqua;
     }
-}
+} */
