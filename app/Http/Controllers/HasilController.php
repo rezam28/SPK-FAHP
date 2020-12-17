@@ -58,20 +58,23 @@ class HasilController extends Controller
         $countperkriteria = count($perkriteria);
 
         // Matrik kriteria AHP
-        foreach ($kriteria as $baris ) {
-            foreach ($kriteria as $kolom ) {
-                foreach ($perkriteria as $value ) {
-                    if ($baris->kode == $value->kriteria1->kode && $kolom->kode == $value->kriteria2->kode) {
-                        $matrikahp[] =  $value->nilai;
-                    }
-                }
-            }
-            $jumlahahp[] = array_sum($matrikahp);
-            $matrikahp = array();
-        }
+        // foreach ($kriteria as $baris ) {
+        //     foreach ($kriteria as $kolom ) {
+        //         foreach ($perkriteria as $value ) {
+        //             if ($baris->kode == $value->kriteria1->kode && $kolom->kode == $value->kriteria2->kode) {
+        //                 $matrikahp[] =  $value->nilai;
+        //             }
+        //         }
+        //     }
+        //     $jumlahahp[] = array_sum($matrikahp);
+        //     $matrikahp = array();
+        // }
 
         //Matrik kriteria Fuzzy AHP
         foreach ($kriteria as $baris ) {
+            $matrikfahapl = [];
+            $matrikfahapm = [];
+            $matrikfahapu = [];
             foreach ($kriteria as $kolom ) {
                 foreach ($perkriteria as $value ) {
                     if ($baris->kode == $value->kriteria1->kode && $kolom->kode == $value->kriteria2->kode) {
@@ -94,7 +97,7 @@ class HasilController extends Controller
                             $matrikfahapm[] = 3/2;
                             $matrikfahapu[] = 2;
                         }
-                        elseif ($value->nilai == 1/3) {
+                        elseif ($value->nilai == round(1/3,3)) {
                             $matrikfahapl[] = 1/2;
                             $matrikfahapm[] = 2/3;
                             $matrikfahapu[] = 1;
@@ -124,21 +127,29 @@ class HasilController extends Controller
                             $matrikfahapm[] = 3;
                             $matrikfahapu[] = 7/2;
                         }
-                        elseif ($value->nilai == round(1/6)) {
+                        elseif ($value->nilai == round(1/6,3)) {
                             $matrikfahapl[] = 2/7;
                             $matrikfahapm[] = 1/3;
                             $matrikfahapu[] = 2/5;
                         }
+                        elseif ($value->nilai == 7) {
+                            $matrikfahapl[] = 3;
+                            $matrikfahapm[] = 7/2;
+                            $matrikfahapu[] = 4;
+                        }
+                        elseif ($value->nilai == round(1/7,3)) {
+                            $matrikfahapl[] = 1/4;
+                            $matrikfahapm[] = 2/7;
+                            $matrikfahapu[] = 1/3;
+                        }
                     }
                 }
             }
-            $barissi[] = $baris->kode;
+            $kodekriteria[] = $baris->kode;
+            $namakriteria[] = $baris->nama_kriteria;
             $jumlahfahapl[] = array_sum($matrikfahapl);
             $jumlahfahapm[] = array_sum($matrikfahapm);
             $jumlahfahapu[] = array_sum($matrikfahapu);
-            $matrikfahapl = array();
-            $matrikfahapm = array();
-            $matrikfahapu = array();
         }
         $sumnilail = array_sum($jumlahfahapl);
         $sumnilaim = array_sum($jumlahfahapm);
@@ -157,18 +168,49 @@ class HasilController extends Controller
             $nilaisiu[] = $value*(1/$sumnilail);
         }
         
-        $test = [
-            'jumlahnilail' => $jumlahfahapl,        //jumlah nilai l
-            'jumlahnilaim' => $jumlahfahapm,
-            'jumlahnilaiu' => $jumlahfahapu,
+        $sil[] = $nilaisil;
+        $sim[] = $nilaisim;
+        $siu[] = $nilaisiu;
+        $si = [
             'l' => $nilaisil,
             'm' => $nilaisim,
             'u' => $nilaisiu
         ];
 
+        //Nilai Defuzzifikasi
+
+        foreach ($si['m'] as $no => $isi) {
+            $defuzzy = [];
+            foreach ($si['m'] as $key => $value) {
+                if ($no != $key) {
+                    
+                    if ($si['m'][$no] >= $si['m'][$key]) {
+                        $defuzzy[] = 1;
+                    }elseif ($si['l'][$key] >= $si['u'][$no]) {
+                        $defuzzy[] = 0;
+                    }else {        
+                        $defuzzy[] = ( $si['l'][$key]-$si['u'][$no] ) / (( $si['m'][$no]-$si['u'][$no] ) - ( $si['m'][$key]-$si['l'][$key] ));                        
+                    }
+                }else{
+                    $defuzzy[] = 5;
+                }
+            }
+            $defuzzyarray[] = $defuzzy;
+            $vektor[] = min($defuzzy);
+        }
+        $sumvektor = array_sum($vektor);
+        
+
+        //Nilai Bobot Kriteria
+
+        foreach ($vektor as $key => $value) {
+            $bobot[] = $value/$sumvektor;
+        }
+
         $data = [
             //nilai SI
-            'barissi' => $barissi,                  //Jumlah kriteria
+            'kodekri' => $kodekriteria,                  //Jumlah kriteria / kode kriteria
+            'namakri' => $namakriteria,
             'jumlahnilail' => $jumlahfahapl,        //jumlah nilai l
             'jumlahnilaim' => $jumlahfahapm,
             'jumlahnilaiu' => $jumlahfahapu,
@@ -177,12 +219,14 @@ class HasilController extends Controller
             'sumnilaiu' => $sumnilaiu,
             'nilaisil' => $nilaisil,                //Nilai si L
             'nilaisim' => $nilaisim,
-            'nilaisiu' => $nilaisiu
+            'nilaisiu' => $nilaisiu,
+            'defuzzy' => $defuzzyarray,             //nilai Defuzzifikasi
+            'vektor' => $vektor,                     //Nilai Vektor
+            'bobotkri' => $bobot                    //Nilai Bobot Kriteria
         ];
-        // dd($data);
-        //dd($barissi);
+        // dd($coba);
         // dd($test);
-        // dd($jumlahfahapl);
+        // dd($data);
         
         return view('hasilranking',compact('kriteria', $kriteria, 
                                     'alternatif', $alternatif,

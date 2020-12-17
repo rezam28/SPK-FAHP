@@ -25,7 +25,6 @@
                             @foreach ($kriteria as $item)
                                 <th>{{$item['kode']}}</th>
                             @endforeach
-                            {{-- <th>Eigenvektor</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -36,28 +35,11 @@
                                 <td>
                                     @foreach ($perkriteria as $value)
                                         @if ($baris->kode == $value->kriteria2->kode && $kolom->kode == $value->kriteria1->kode)
-                                            {{-- {{$value->nilai}} --}}
                                             {{$value->nilai}}
                                         @endif
                                     @endforeach
                                 </td>
-                                {{-- <td>
-                                    @foreach ($jumlah as $item)
-                                        {{$item}}
-                                    @endforeach
-                                    @for ($i = 0; $i < count($jumlah); $i++)
-                                        @if($i == 1 )
-                                            {{$jumlah[$i]}}
-                                        @endif
-                                    @endfor
-                                </td> --}}
                                 @endforeach
-                                
-                                {{-- @for ($i = 0; $i < count($jumlah); $i++)
-                                    <td>
-                                        {{$jumlah[$i]}}
-                                    </td>
-                                @endfor --}}
                             </tr>
                         @endforeach
                     </tbody>
@@ -104,7 +86,7 @@
                                                     {{round(2/3,3)}}
                                                 @elseif($value->nilai == 3)
                                                     {{1}}
-                                                @elseif($value->nilai == 1/3)
+                                                @elseif($value->nilai == round(1/3,3))
                                                     {{1/2}}
                                                 @elseif($value->nilai == 4)
                                                     {{3/2}}
@@ -137,8 +119,8 @@
                                                     {{1}}
                                                 @elseif($value->nilai == 3)
                                                     {{3/2}}
-                                                @elseif($value->nilai == 1/3)
-                                                    {{round(2/3)}}
+                                                @elseif($value->nilai == round(1/3,3))
+                                                    {{round(2/3,3)}}
                                                 @elseif($value->nilai == 4)
                                                     {{2}}
                                                 @elseif($value->nilai == 1/4)
@@ -170,12 +152,12 @@
                                                     {{2}}
                                                 @elseif($value->nilai == 3)
                                                     {{2}}
-                                                @elseif($value->nilai == 1/3)
+                                                @elseif($value->nilai == round(1/3,3))
                                                     {{1}}
                                                 @elseif($value->nilai == 4)
                                                     {{5/2}}
                                                 @elseif($value->nilai == 1/4)
-                                                    {{round(2/3)}}
+                                                    {{round(2/3,3)}}
                                                 @elseif($value->nilai == 5)
                                                     {{3}}
                                                 @elseif($value->nilai == 1/5)
@@ -218,7 +200,7 @@
                             <th>U</th>
                             @endfor
                         </tr>
-                        @foreach ($data['barissi'] as $key => $value)
+                        @foreach ($data['kodekri'] as $key => $value)
                             <tr>
                                 <td>{{$value}}</td>
                                 <td>{{round($data['jumlahnilail'][$key],3)}}</td>
@@ -245,20 +227,80 @@
                 <div class="panel-heading table-bordered table-stripes">
                     <strong>Nilai Vektor Dan Defuzzifikasi</strong>
                 </div>
-                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_ahp">
+                @foreach ($data['kodekri'] as $no => $isi)
+                <div class="panel-heading table-bordered table-stripes">
+                    <strong>{{$isi}} - {{$data['namakri'][$no]}}</strong>
+                </div>
+                <table class="table table-bordered table-stripes table-responsive-md" id="table_defuzzifikasi">
                     <thead>
                         <tr>
-                            
+                            <th></th>
+                            <th>Nilai Defuzzifikasi</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($data['defuzzy'][$no] as $key => $value)
+                            <tr>
+                                @if ($no != $key)
+                                    <td>{{$isi}} > {{$data['kodekri'][$key]}}</td>
+                                    <td>{{round($value,3)}}</td>
+                                @endif
+                                
+                            </tr>
+                        @endforeach
                         <tr>
-                            
+                            <td>Min / Vektor</td>
+                            <td>{{round($data['vektor'][$no],3)}}</td>
                         </tr>
+                    </tbody>
+                </table>
+                @endforeach
+            </div>
+
+            <div class="table-responsive-md col-12">
+                <div class="panel-heading table-bordered table-stripes">
+                    <strong>Normalisasi Bobot Vektor</strong>
+                </div>
+                <table class="table table-bordered table-stripes table-responsive-md" id="table_si">
+                    <thead>
+                        <tr>
+                            <th>Kriteria</th>
+                            <th>W / Vektor</th>
+                            <th>Wlokal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data['namakri'] as $no => $item)
+                            <tr>
+                                <td>{{$data['kodekri'][$no]}} - {{$item}}</td>
+                                <td>{{round($data['vektor'][$no],3)}}</td>
+                                <td>{{round($data['bobotkri'][$no],3)}}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
+
+        @foreach ($alternatif as $no => $item)
+        <div class="table-responsive-md col-12">
+            <div class="panel-heading table-bordered table-stripes">
+                <strong>Alternatif</strong>
+            </div>
+            <table class="table table-bordered table-stripes table-responsive-md" id="table_si">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @endforeach
 
         {{-- Panel Hasil --}}
         <div class="panel" id="hasil-ranking">
