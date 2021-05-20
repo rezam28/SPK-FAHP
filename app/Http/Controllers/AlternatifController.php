@@ -13,7 +13,8 @@ class AlternatifController extends Controller
 {
     public function index()
     {
-        return view('alternatif');
+        $alternatif = Alternatif::all();
+        return view('alternatif',compact('alternatif',$alternatif));
     }
 
     public function admin(Request $request)

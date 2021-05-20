@@ -28,16 +28,36 @@ class PerbandinganalternatifController extends Controller
     {
         $daerah = $request->daerah;
         $kriteria = $request->kriteria;
+        $datakri = Kriteria::where('id','=',$kriteria)->get();
+        $datadae = Daerah::where('id','=',$daerah)->get();
+
+        $namakri = $datakri->pluck('nama_kriteria');
+        $alternatif = Alternatif::all();
         if($kriteria==0 || $daerah == 0){
             $post = Perbandinganalternatif::where('daerah_id','=',$daerah)->orWhere('nama_kriteria','=',$kriteria)->get();
         }else{
             $post = Perbandinganalternatif::where([['daerah_id','=',$daerah],['nama_kriteria','=',$kriteria],])->get();
         }
-        return response()->json($post);
+        return response()->json(array(
+            'post' => $post,
+            'alternatif' => $alternatif,
+            'kriteria' => $namakri,
+            'daerah' => $datadae
+        ));
     }
 
     public function store(Request $request)
     {
+        if ($request->input("alternatif1") == $request->input("alternatif2")) {
+            $data = Perbandinganalternatif::updateOrCreate(['daerah_id' => $request->daerah, 'nama_kriteria' => $request->kriteria, 'alternatif1_id' => $request->input("alternatif1"),'alternatif2_id' => $request->input("alternatif2")],
+                    [
+                        'daerah_id' => $request->daerah,
+                        'kriteria1_id' => $request->input("kriteria1"),
+                        'nilai' => $request->nilai,
+                        'kriteria2_id' => $request->input("kriteria2")
+                    ],
+                );
+        }else
         for ($i=1; $i<=2 ; $i++) { 
             if ($i = 1) {
                 $data = Perbandinganalternatif::updateOrCreate(['daerah_id' => $request->daerah, 'nama_kriteria' => $request->kriteria, 'alternatif1_id' => $request->input("alternatif1"),'alternatif2_id' => $request->input("alternatif2")],
@@ -61,8 +81,8 @@ class PerbandinganalternatifController extends Controller
                     ],
                 );
             }else {}
-            return response()->json($data);
         }
+        return response()->json($data);
     }
 
     public function destroy($id)

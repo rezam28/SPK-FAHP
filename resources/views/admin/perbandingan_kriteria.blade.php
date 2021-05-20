@@ -20,15 +20,13 @@
 
 @section('content')
     <div id="perbandingan">
-        <h3>Perbandingan Kriteria</h3>
-        <hr>
         <div class="panel panel-default">
             <div id="table-perbandingan" class="table-responsive-md col-12">
                 <div class="panel-header">
                     <h3 class="title-center">Data Perbandingan Kriteria</h3>
                 </div>
+                <hr class="hr-title">
                 <div class="input-group">
-                    
                     <form id="form_perbandingan_kriteria" name="form_perbandingan_kriteria" name="form-horizontal">
                         @csrf
                         <input type="hidden" name="perbandingan_id" id="perbandingan_id" value="" required>
@@ -64,7 +62,7 @@
                             @endforeach
                         </select>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-success" type="button" id="btn_simpan">Input</button>
+                            <button type="submit" class="btn btn-outline-success" type="button" id="btn_simpan">Input</button>
                         </div>
                     </form>
                 </div>
@@ -103,8 +101,8 @@
             <div class="panel-heading">
                 <strong>Matrik perbandingan Kriteria AHP </strong>
             </div>
-            <div class="table-responsive-md col-12">
-                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_ahp">
+            <div style="overflow-x: auto">
+                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_ahp" style="display: none">
                     <thead>
                         <tr>
                             <th></th>
@@ -113,19 +111,10 @@
                             @endforeach
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="matrik_ahp">
                         @foreach ($kriteria as $kolom)
                             <tr>
                                 <td>{{$kolom['kode']}}</td>
-                                @foreach ($kriteria as $baris)
-                                <td>
-                                    @foreach ($perbandingan as $value)
-                                        @if ($baris->kode == $value->kriteria2->kode && $kolom->kode == $value->kriteria1->kode)
-                                            {{$value->nilai}}
-                                        @endif
-                                    @endforeach
-                                </td>
-                                @endforeach
                             </tr>
                         @endforeach
                     </tbody>
@@ -138,8 +127,8 @@
             <div class="panel-heading">
                 <strong>Matrik perbandingan Kriteria Fuzzy AHP </strong>
             </div>
-            <div class="table-responsive-md col-12">
-                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_tfn">
+            <div style="overflow-x: auto">
+                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_fahp" style="display: none">
                     <thead>
                         <tr>
                             <th></th>
@@ -149,7 +138,7 @@
                         </tr>
                         <tr></tr>
                     </thead>
-                    <tbody>
+                    <tbody id="matrik_fahp">
                         <tr>
                             <td></td>
                             @foreach ($kriteria as $item)
@@ -161,36 +150,6 @@
                         @foreach ($kriteria as $kolom)
                             <tr>
                                 <td>{{$kolom['kode']}}</td>
-                                @foreach ($kriteria as $baris)
-                                    {{-- @foreach ($perbandingan as $value)
-                                        @if ($kolom->kode == $value->kriteria2->kode && $baris->kode == $value->kriteria1->kode)
-                                            <td>{{$value->nilai}}L</td>
-                                            <td>{{$value->nilai}}M</td>
-                                            <td>{{$value->nilai}}U</td>
-                                        @endif
-                                    @endforeach --}}
-                                    <td>
-                                        @foreach ($perbandingan as $value)
-                                            @if ($baris->kode == $value->kriteria2->kode && $kolom->kode == $value->kriteria1->kode)
-                                                {{$value->nilai}}L
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                    <td>
-                                        @foreach ($perbandingan as $value)
-                                            @if ($baris->kode == $value->kriteria2->kode && $kolom->kode == $value->kriteria1->kode)
-                                                {{$value->nilai}}M
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                    <td>
-                                        @foreach ($perbandingan as $value)
-                                            @if ($baris->kode == $value->kriteria2->kode && $kolom->kode == $value->kriteria1->kode)
-                                                {{$value->nilai}}U
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                @endforeach
                             </tr>
                         @endforeach
                     </tbody>
@@ -246,36 +205,41 @@
     $(document).ready(function () {
         var table = $('#table_perbandingan_kriteria').DataTable({
             // "bServerSide": true,
+            "pageLength": 10,
             "bPaginate": true,
             "bJQueryUI": true, // ThemeRoller-stöd
             "bLengthChange": false,
-            "bFilter": false,
+            // "bFilter": false,
             "bSort": false,
             "bInfo": true,
             "bAutoWidth": true,
             "bProcessing": true,
             "iDisplayLength": 10,
-            // ajax : {
-            //     url: "{{route('ad_pk')}}",
-            // },
-            // columns: [
-            //     {data: 'kode' , nama: 'kode'},
-            //     {data: 'nama_kriteria' , nama:'nama_kriteria'},
-            //     {data: 'deskripsi', nama:'deskripsi',orderable: false},
-            //     {data: 'aksi', name: 'aksi', orderable: false, searchable: false}
-            // ]
         });
     });
 
     $('#daerah').on('change', function() {
         let daerah = $(this).val(); //daerahID
         $('#table_perbandingan_kriteria').removeAttr('hidden');
-        //$('#pilih_daerah').attr('hidden',true);
-        $('#nilai_perbandingan').empty();
+        $('#table_skala_ahp').show();
+        $('#table_skala_fahp').show();
+
+        $('#matrik_ahp').empty();
+        $('#matrik_fahp').empty();
+
+        var table = $('#table_perbandingan_kriteria').DataTable();
+        table.clear();
         
         $.get('{{url('admin/perbandingan-kriteria')}}/'+ daerah,function (data) {
-            //console.log(data);
-            $.each(data, function (indexInArray, v) {
+            // console.log(data);
+            if(!$.trim(data['post'])){
+                $('#table_skala_ahp').hide();
+                $('#table_skala_fahp').hide();
+
+                $('#table_perbandingan_kriteria').DataTable().clear().draw();
+            }
+            //data table
+            $.each(data['post'], function (indexInArray, v) {
                 var tr = '<tr>';
                 tr += '<td>'+(indexInArray+1)+'</td>';
                 tr += '<td>'+v.daerah.nama_daerah+'</td>';
@@ -284,9 +248,164 @@
                 tr += '<td>'+v.kriteria2.kode +'&nbsp'+'-'+'&nbsp'+ v.kriteria2.nama_kriteria+'</td>';
                 tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
                 tr += '</tr>';
-                $('#nilai_perbandingan').append(tr);
-                //console.log(v.nilai);
-                //$('#nilai_perbandingan').append("<tr><td>"+(indexInArray+1)+"</td><td>"+v.daerah.nama_daerah+"</td><td>"+v.kriteria1.kode+'&nbsp'+'-'+'&nbsp'+v.kriteria1.nama_kriteria+ "</td><td>"+v.nilai+"</td><td>"+v.kriteria2.kode +'&nbsp'+'-'+'&nbsp'+ v.kriteria2.nama_kriteria+"</td><td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hapusmodal">Hapus</button></td></tr>");
+                var table = $('#table_perbandingan_kriteria').DataTable();
+                table.rows.add($(tr)).draw();
+            });
+
+            //matrik ahp
+            $.each(data['kriteria'], function (no, value) { 
+                var tr = '<tr>';
+                tr += '<td>'+value.kode+'&nbsp'+'-'+'&nbsp'+value.nama_kriteria+'</td>';
+                $.each(data['kriteria'], function (index, item) {
+                    tr +='<td>';
+                    $.each(data['post'], function (i, e) { 
+                        if (item.kode == e.kriteria2.kode && value.kode == e.kriteria1.kode) {
+                            tr += e.nilai;
+                        }
+                    });
+                    tr +='</td>'
+                });
+                tr += '</tr>';
+                $('#matrik_ahp').append(tr);
+            });
+
+            //matrik fuzzy ahp
+            var tr = '<tr>';
+                tr += '<td></td>';
+                $.each(data['kriteria'], function (no, value) { 
+                        tr += '<th>L</th>';
+                        tr += '<th>M</th>';
+                        tr += '<th>U</th>';
+                });
+            tr += '</tr>';
+            $('#matrik_fahp').append(tr);
+
+            $.each(data['kriteria'], function (no, value) { 
+                var tr = '<tr>';
+                tr += '<td>'+value.kode+'</td>';
+                $.each(data['kriteria'], function (index, item) {
+                    tr += '<td>';
+                    $.each(data['post'], function (i, e) {
+                        if (item.kode == e.kriteria2.kode && value.kode == e.kriteria1.kode) {
+                            if (e.nilai == 1 || 1/e.nilai == 1){
+                                tr += 1;
+                            }
+                            else if(e.nilai == 2){
+                                tr += 1/2;
+                            }
+                            else if(e.nilai == 1/2){
+                                tr += (2/3).toFixed(3);
+                            }
+                            else if(e.nilai == 3){
+                                tr += 1;
+                            }
+                            else if(e.nilai == (1/3).toFixed(3)){
+                                tr += 1/2;
+                            }
+                            else if(e.nilai == 4){
+                                tr += 3/2;
+                            }
+                            else if(e.nilai == 1/4){
+                                tr += 2/5;
+                            }
+                            else if(e.nilai == 5){
+                                tr += 2;
+                            }
+                            else if(e.nilai == 1/5){
+                                tr += (1/3).toFixed(3);
+                            }
+                            else if(e.nilai == 6){
+                                tr += 5/2;
+                            }
+                            else if(e.nilai == (1/6).toFixed(3)){
+                                tr += (2/7).toFixed(3);
+                            }else{}
+                        }
+                    });
+                    tr += '</td>';
+
+                    tr += '<td>';
+                    $.each(data['post'], function (i, e) {
+                        if (item.kode == e.kriteria2.kode && value.kode == e.kriteria1.kode) {
+                            if (e.nilai == 1 || 1/e.nilai == 1){
+                                tr += 1;
+                            }
+                            else if(e.nilai == 2){
+                                tr += 1;
+                            }
+                            else if(e.nilai == 1/2){
+                                tr += 1;
+                            }
+                            else if(e.nilai == 3){
+                                tr += 3/2;
+                            }
+                            else if(e.nilai == (1/3).toFixed(3)){
+                                tr += (2/3).toFixed(3);
+                            }
+                            else if(e.nilai == 4){
+                                tr += 2;
+                            }
+                            else if(e.nilai == 1/4){
+                                tr += 1/2;
+                            }
+                            else if(e.nilai == 5){
+                                tr += 5/2;
+                            }
+                            else if(e.nilai == 1/5){
+                                tr += 2/5;
+                            }
+                            else if(e.nilai == 6){
+                                tr += 3;
+                            }
+                            else if(e.nilai == (1/6).toFixed(3)){
+                                tr += (1/3).toFixed(3);
+                            }else{}
+                        }
+                    });
+                    tr += '</td>';
+
+                    tr += '<td>';
+                    $.each(data['post'], function (i, e) {
+                        if (item.kode == e.kriteria2.kode && value.kode == e.kriteria1.kode) {
+                            if (e.nilai == 1 || 1/e.nilai == 1){
+                                tr += 1;
+                            }
+                            else if(e.nilai == 2){
+                                tr += 3/2;
+                            }
+                            else if(e.nilai == 1/2){
+                                tr += 2;
+                            }
+                            else if(e.nilai == 3){
+                                tr += 2;
+                            }
+                            else if(e.nilai == (1/3).toFixed(3)){
+                                tr += 1;
+                            }
+                            else if(e.nilai == 4){
+                                tr += 5/2;
+                            }
+                            else if(e.nilai == 1/4){
+                                tr += (2/3).toFixed(3);
+                            }
+                            else if(e.nilai == 5){
+                                tr += 3;
+                            }
+                            else if(e.nilai == 1/5){
+                                tr += 1/2;
+                            }
+                            else if(e.nilai == 6){
+                                tr += 7/2;
+                            }
+                            else if(e.nilai == (1/6).toFixed(3)){
+                                tr += 2/5;
+                            }else{}
+                        }
+                    });
+                    tr += '</td>';
+                });
+                tr += '</tr>';
+                $('#matrik_fahp').append(tr);
             });
         });
     });
@@ -301,15 +420,14 @@
                     data: $('#form_perbandingan_kriteria').serialize(),
                     dataType: "json",
                     success: function (response) {
-                        $('#form_perbandingan_kriteria').trigger('reset');
+                        $('#form_perbandingan_kriteria').trigger("reset");
                         $('#btn_simpan').html('Input');
-                        var table = $('#table_perbandingan_kriteria').dataTable(); //inialisasi datatable
-                        // table.fnDraw(false); //reset datatable
-                        table.reload();
+                        location.reload();
                     },
                     error: function(response){
+                        alert(response.responseText);
                         console.log(response);
-                        $('#btn_simpan').html('Input');
+                        $('#btn_simpan').html('error');
                     }
                 });
             }
@@ -332,8 +450,10 @@
             success: function (data) { //jika sukses
                 setTimeout(function () {
                     $('#hapusmodal').modal('hide'); //sembunyikan konfirmasi hapus modal
-                    var Table = $('#table_perbandingan_kriteria').dataTable();
-                    Table.fnDraw(false); //reset datatable
+                    // var Table = $('#table_perbandingan_kriteria').dataTable();
+                    // Table.ajax.reload();
+                    // Table.fnDraw(false); //reset datatable
+                    location.reload();
                 });
             },
             error: function (data) {

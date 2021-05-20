@@ -12,20 +12,12 @@
 @endsection
 
 @section('content')
-    {{-- @if(\Session::has('alert'))
-    <div class="alert alert-danger" role="alert" style="width:1170px">
-      <div>{{Session::get('alert')}}</div>
-    </div>
-    @endif --}}
   <div class="table-hasil">
-      <h3>Alternatif</h3>
-      <hr>
-      <div class="panel">
-            <div class="panel-header">
-              <h3 class="title-center">Data Alternatif</h3>
-              <a class="btn btn-success" href="javascript:void(0)" id="tambah-alternatif"> Tambah</a>
-            </div>
-              <div class="row">
+        <div class="panel">
+            <h3 class="title-center">Data Alternatif</h3>
+            <hr class="hr-title">
+            <a class="btn btn-success" href="javascript:void(0)" id="tambah-alternatif"> Tambah</a>
+            <div class="row" id="table-data">
                 <div class="col-12">
                 <table id="table" class="table table-bordered table-striped">
                     @csrf
@@ -77,8 +69,8 @@
                               </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="sumbit" id="btn-simpan" class="btn btn-success" value="tambah">Tambah</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="sumbit" id="btn-simpan" class="btn btn-outline-success" value="tambah">Tambah</button>
+                            <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>

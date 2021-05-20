@@ -5,33 +5,66 @@
 @section('css')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
 <style type="text/css">
-    #peta{
-        height:100%;
-        width: 100%;
-    }
+    
 </style>
 @endsection
 
 @section('content')
-<div id="peta"></div>
+<div id="peta-panel" class="peta-panel" >
+    <div id="peta" class="peta"></div>
+</div>
 @endsection
 
 @section('javascript')
 <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1wZZqn8OiFRUNDR3MSMHS32NvGwknVDI&callback=initMap" async defer></script>
 <script type="text/javascript">
-    var mapOptions = {
-        center: [-7.4478, 112.7183],
-        zoom: 12.5
+    var data = @json($peta);
+    var map;
+    var marks = [];
+	function initMap() {
+        console.log(data);
+        
+		map = new google.maps.Map(document.getElementById('peta'), {
+		  center: {lat: -7.472613, lng: 112.667542},
+		  zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        for(var i = 0; i < data.length; i++){
+            marks[i] = addMarker(data[i]);
+        }
+	}
+
+    function addMarker(marker){
+        var point = new google.maps.LatLng(parseFloat(marker.daerah.lat),parseFloat(marker.daerah.lng));
+        var html = '<div id="iw-container">' +
+                    '<div class="iw-title">Kecamatan '+marker.daerah.nama_daerah+'</div>' +
+                    '<div class="iw-content">' +
+                      '<div class="iw-subTitle">Longitude</div>' +
+                      '<p>'+marker.daerah.lng+'</p>' +
+                      '<div class="iw-subTitle">Latitude</div>' +
+                      '<p>'+marker.daerah.lat+'</p>' +
+                      '<div class="iw-subTitle">Keterangan</div>' +
+                      '<p>Pilihan Terbaik untuk tanaman pangan Di Kecamatan '+marker.daerah.nama_daerah+' adalah :<br>'+marker.keterangan+'</p>'+
+                    '</div>' +
+                    '<div class="iw-bottom-gradient"></div>' +
+                  '</div>';
+        var icon = {
+            url: "https://img.icons8.com/material-sharp/48/fa314a/marker.png", // url
+            
+        }
+        var mark = new google.maps.Marker({
+            map: map,
+            position: point,
+            icon: icon
+        });
+        var infoWindow = new google.maps.InfoWindow;
+        google.maps.event.addListener(mark, 'click', function(){
+            infoWindow.setContent(html);
+            infoWindow.open(map, mark);
+        });
+        return mark;
     }
-
-    var peta = new L.map('peta', mapOptions);
-
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-    }).addTo(peta);
-
 </script>
 @endsection

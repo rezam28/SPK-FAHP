@@ -11,7 +11,7 @@ class Daerah extends Model
     
     protected $table = 'daerah';
 
-    protected $fillable = ['nama_daerah'];
+    protected $fillable = ['nama_daerah','lat','lng'];
 
     function perbandingankriteria()
     {

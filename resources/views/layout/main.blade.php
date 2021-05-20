@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
+    <script src="https://kit.fontawesome.com/69e0e324fb.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" 
@@ -20,8 +21,8 @@
         <!-- Image and text -->
         <nav class="navbar">
             <a class="logo navbar-brand" href="/">
-                <img src="{{('../img/untag.png')}}" width="30" height="30" class="title" alt="" loading="lazy">
-                Sistem Pendukung Kepustusan
+                <img src="{{('../img/logo.png')}}" width="30" height="30" class="title" alt="" loading="lazy">
+                SPK - LAHAN
             </a>
             {{-- @if (\Session::has('login'))
                 <a href="{{route('logout')}}" class="logout">Logout</a>
@@ -34,6 +35,24 @@
             <nav>
                 <ul>
                     <li>
+                        <a href="{{route('alternatif')}}">
+                            <span class="icon"><i class="fas fa-address-book fa-lg"></i></span>
+                            <span class="title">Alternatif</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('kriteria')}}">
+                            <span class="icon"><i class="fa fa-book" aria-hidden="true"></i></span>
+                            <span class="title">Kriteria</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('daerah')}}">
+                            <span class="icon"><i class="far fa-flag fa-lg"></i></span>
+                            <span class="title">Daerah</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{route('hasil')}}">
                             <span class="icon"><i class="fa fa-calculator" aria-hidden="true"></i></span>
                             <span class="title">Hasil</span>
@@ -43,18 +62,6 @@
                         <a href="{{route('peta')}}">
                             <span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
                             <span class="title">Peta</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('kriteria')}}">
-                            <span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-                            <span class="title">Kriteria</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('alternatif')}}">
-                            <span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-                            <span class="title">Alternatif</span>
                         </a>
                     </li>
                 </ul>

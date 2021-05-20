@@ -20,13 +20,12 @@
 
 @section('content')
     <div id="perbandingan">
-        <h3>Perbandingan alternatif</h3>
-        <hr>
         <div class="panel panel-deafult">
             <div id="table-perbandingan" class="table-responsive-md col-12">
                 <div class="panel-header">
                     <h3 class="title-center">Data Perbandingan alternatif</h3>
                 </div>
+                <hr class="hr-title">
                 <div class="input-group">
                     <form id="form_perbandingan_alternatif" name="form_perbandingan_alternatif">
                         @csrf
@@ -68,7 +67,7 @@
                             @endforeach
                         </select>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-success" type="button" id="btn_simpan">Input</button>
+                            <button type="submit" class="btn btn-outline-success" type="button" id="btn_simpan">Input</button>
                         </div>
                     </form>
                 </div>
@@ -107,10 +106,10 @@
         {{-- Matrik Skala AHP --}}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong>Matrik perbandingan alternatif AHP </strong>
+                <strong id="ahp_title">Matrik perbandingan alternatif AHP </strong>
             </div>
-            <div class="table-responsive-md col-12">
-                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_ahp">
+            <div style="overflow-x: auto">
+                <table class="table table-bordered table-stripes table-responsive-md" id="table_skala_ahp" style="display: none">
                     <thead>
                         <tr>
                             <th></th>
@@ -119,19 +118,10 @@
                             @endforeach
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="matrik_ahp">
                         @foreach ($alternatif as $kolom)
                             <tr>
                                 <td>{{$kolom['kode']}}</td>
-                                @foreach ($alternatif as $baris)
-                                <td>
-                                    @foreach ($perbandingan as $value)
-                                        @if ($baris->kode == $value->alternatif2->kode && $kolom->kode == $value->alternatif1->kode)
-                                            {{$value->nilai}}
-                                        @endif
-                                    @endforeach
-                                </td>
-                                @endforeach
                             </tr>
                         @endforeach
                     </tbody>
@@ -187,49 +177,43 @@
     $(document).ready(function () {
         var table = $('#table_perbandingan_alternatif').DataTable({
             // "bServerSide": true,
+            "pageLength": 10,
             "bPaginate": true,
             "bJQueryUI": true, // ThemeRoller-stöd
             "bLengthChange": false,
-            "bFilter": false,
+            // "bFilter": false,
             "bSort": false,
             "bInfo": true,
             "bAutoWidth": true,
             "bProcessing": true,
             "iDisplayLength": 10,
-            // ajax : {
-            //     url: "{{route('ad_pk')}}",
-            // },
-            // columns: [
-            //     {data: 'kode' , nama: 'kode'},
-            //     {data: 'nama_kriteria' , nama:'nama_kriteria'},
-            //     {data: 'deskripsi', nama:'deskripsi',orderable: false},
-            //     {data: 'aksi', name: 'aksi', orderable: false, searchable: false}
-            // ]
         });
     });
-
-    // $('#daerah').on('change', function() {
-    //     let daerah = $(this).val(); //daerahID
-    //     $('#nilai_perbandingan').empty();        
-    // });
 
     $(document).ready(function () {
         $("#daerah,#kriteria").on("change", function () {
             let kriteria = $('#kriteria').val(); //kriteriaID
             let daerah = $('#daerah').val(); //daerahID
-            SearchData(daerah, kriteria)
-            // console.log(kriteria);
-            // console.log(daerah);
+            SearchData(daerah, kriteria);
             $('#nilai_perbandingan').empty();
+
+            var table = $('#table_perbandingan_alternatif').DataTable();
+            table.clear();
         });
     });
 
     function SearchData(daerah, kriteria) {
-        if (daerah == 0 && kriteria == 0) {
+        if (daerah === null || kriteria === null) {
             //$('#table11 tbody tr').show();
             $.get('{{url('admin/perbandingan-alternatif')}}/'+ kriteria,{daerah : daerah, kriteria : kriteria},function (data) {
-            console.log(data);
-                $.each(data, function (indexInArray, v) {
+            // console.log(data);
+                if(!$.trim(data['post'])){
+                    $('#table_skala_ahp').hide();
+                    $('#table_skala_fahp').hide();
+
+                    $('#table_perbandingan_alternatif').DataTable().clear().draw();
+                }
+                $.each(data['post'], function (indexInArray, v) {
                     var tr = '<tr>';
                     tr += '<td>'+(indexInArray+1)+'</td>';
                     tr += '<td>'+v.daerah.nama_daerah+'</td>';
@@ -239,41 +223,77 @@
                     tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
                     tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
                     tr += '</tr>';
-                    $('#nilai_perbandingan').append(tr);
+                    var table = $('#table_perbandingan_alternatif').DataTable();
+                    table.rows.add($(tr)).draw();
                 });
             });
-        } else {
+        }
+        else if (daerah != 0 && kriteria != 0) {
+            $('#table_skala_ahp').show();
+            $('#table_skala_fahp').show();
+            $('#matrik_ahp').empty();
+            $('#matrik_fahp').empty();
             $.get('{{url('admin/perbandingan-alternatif')}}/'+ kriteria,{daerah : daerah, kriteria : kriteria},function (data) {
-                //console.log(data);
-                $.each(data, function (indexInArray, v) {
-                    if (daerah != 0 && kriteria != 0) {
-                        var tr = '<tr>';
-                        tr += '<td>'+(indexInArray+1)+'</td>';
-                        tr += '<td>'+v.daerah.nama_daerah+'</td>';
-                        tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
-                        tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
-                        tr += '<td>'+v.nilai+'</td>';
-                        tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
-                        tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
-                        tr += '</tr>';
-                        $('#nilai_perbandingan').append(tr);
-                        // if (rowdaerah.toUpperCase() == daerah && rowkriteria == kriteria) {
-                        //     $(this).show();
-                        // } else {
-                        //     $(this).hide();
-                        // }
-                    } else if (daerah != 0 || kriteria != 0) {
-                        var tr = '<tr>';
-                        tr += '<td>'+(indexInArray+1)+'</td>';
-                        tr += '<td>'+v.daerah.nama_daerah+'</td>';
-                        tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
-                        tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
-                        tr += '<td>'+v.nilai+'</td>';
-                        tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
-                        tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
-                        tr += '</tr>';
-                        $('#nilai_perbandingan').append(tr);
-                    }
+                if(!$.trim(data['post'])){
+                    $('#table_skala_ahp').hide();
+                    $('#table_skala_fahp').hide();
+
+                    $('#table_perbandingan_alternatif').DataTable().clear().draw();
+                    $('#ahp_title').html("Matrik Perbandingan AHP Alternatif Terhadap Kriteria "+data['kriteria']);
+                    // console.log(data['kriteria']);
+                }
+                $.each(data['post'], function (indexInArray, v) {
+                    var tr = '<tr>';
+                    tr += '<td>'+(indexInArray+1)+'</td>';
+                    tr += '<td>'+v.daerah.nama_daerah+'</td>';
+                    tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
+                    tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
+                    tr += '<td>'+v.nilai+'</td>';
+                    tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
+                    tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
+                    tr += '</tr>';
+                    var table = $('#table_perbandingan_alternatif').DataTable();
+                    table.rows.add($(tr)).draw();
+                });
+
+                //matrik ahp
+                $.each(data['alternatif'], function (no, value) { 
+                    var tr = '<tr>';
+                    tr += '<td>'+value.kode+'&nbsp'+'-'+'&nbsp'+value.nama_alternatif+'</td>';
+                    $.each(data['alternatif'], function (index, item) {
+                        tr +='<td>';
+                        $.each(data['post'], function (i, e) { 
+                            if (item.kode == e.alternatif2.kode && value.kode == e.alternatif1.kode) {
+                                tr += e.nilai;
+                            }
+                        });
+                        tr +='</td>'
+                    });
+                    tr += '</tr>';
+                    $('#matrik_ahp').append(tr);
+                });
+            });
+        }
+        else if (daerah != 0 || kriteria != 0) {
+            $.get('{{url('admin/perbandingan-alternatif')}}/'+ kriteria,{daerah : daerah, kriteria : kriteria},function (data) {
+                if(!$.trim(data['post'])){
+                    $('#table_skala_ahp').hide();
+                    $('#table_skala_fahp').hide();
+
+                    $('#table_perbandingan_alternatif').DataTable().clear().draw();
+                }
+                $.each(data['post'], function (indexInArray, v) {
+                    var tr = '<tr>';
+                    tr += '<td>'+(indexInArray+1)+'</td>';
+                    tr += '<td>'+v.daerah.nama_daerah+'</td>';
+                    tr += '<td>'+v.kriteria.nama_kriteria+'</td>';
+                    tr += '<td>'+v.alternatif1.kode+'&nbsp'+'-'+'&nbsp'+v.alternatif1.nama_alternatif+'</td>';
+                    tr += '<td>'+v.nilai+'</td>';
+                    tr += '<td>'+v.alternatif2.kode +'&nbsp'+'-'+'&nbsp'+ v.alternatif2.nama_alternatif+'</td>';
+                    tr += '<td><button type="button" class="delete btn btn-danger" id="'+v.id+'"><i class="fa fa-trash"></i> Hapus</button></td>';
+                    tr += '</tr>';
+                    var table = $('#table_perbandingan_alternatif').DataTable();
+                    table.rows.add($(tr)).draw();
                 });
             });
         }
@@ -291,9 +311,7 @@
                     success: function (response) {
                         $('#form_perbandingan_alternatif').trigger('reset');
                         $('#btn_simpan').html('Input');
-                        var table = $('#table_perbandingan_alternatif').dataTable(); //inialisasi datatable
-                        // table.fnDraw(false); //reset datatable
-                        table.reload();
+                        location.reload();
                     },
                     error: function(response){
                         console.log(response);
@@ -320,8 +338,7 @@
             success: function (data) { //jika sukses
                 setTimeout(function () {
                     $('#hapusmodal').modal('hide'); //sembunyikan konfirmasi hapus modal
-                    var Table = $('#table_perbandingan_alternatif').dataTable();
-                    Table.fnDraw(false); //reset datatable
+                    location.reload();
                 });
             },
             error: function (data) {

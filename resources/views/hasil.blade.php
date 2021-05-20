@@ -9,8 +9,6 @@
 @section('content')
 <div class="hasil">
     <div class="table-hasil table-striped">
-        <h3>Perhitungan</h3>
-        <hr style="width:1150px;">
         <div class="panel">
             <div class="panel-header">
                 <h3>Pilih Alternatif Dan Daerah</h3>

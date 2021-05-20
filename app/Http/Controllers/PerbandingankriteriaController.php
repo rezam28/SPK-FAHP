@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\models\Daerah;
+use Yajra\DataTables\Contracts\DataTable;
+use App\Models\Daerah;
 use App\Models\Kriteria;
 use App\Models\Perbandingankriteria;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class PerbandingankriteriaController extends Controller
                                                           'daerah',$daerah
         ));
     }
+
     public function daerah($daerah)
     {
         if($daerah==0){
@@ -36,7 +38,11 @@ class PerbandingankriteriaController extends Controller
         }else{
             $post = Perbandingankriteria::where('daerah_id','=',$daerah)->get();
         }
-        return response()->json($post);
+        $kriteria = Kriteria::all();
+        return response()->json(array(
+            'post' => $post,
+            'kriteria' => $kriteria
+        ));
     }
 
     public function store(Request $request)
@@ -73,8 +79,8 @@ class PerbandingankriteriaController extends Controller
                     ],
                 );
             }else {}
-            return response()->json($data);
         }
+        return response()->json($data);
     }
 
     public function destroy($id)

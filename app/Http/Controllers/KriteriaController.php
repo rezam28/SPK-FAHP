@@ -11,7 +11,8 @@ class KriteriaController extends Controller
 {
     public function index()
     {
-        return view('kriteria');
+        $kriteria = Kriteria::all();
+        return view('kriteria',compact('kriteria',$kriteria));
     }
 
     public function admin(Request $request)
